@@ -1,0 +1,93 @@
+# shortcut to this dotfiles path is $ZSH
+sudo chsh $USER -s /usr/bin/zsh
+export ZSH=$HOME/.dotfiles
+source ~/.antigen.zsh
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-history-substring-search
+antigen bundle autojump
+# antigen theme zlsun/avit-mod
+antigen bundle skywind3000/z.lua
+antigen apply
+
+export _ZL_MATCH_MODE=1
+
+# your project folder that we can `c [tab]` to
+export PROJECTS=/home/weixin/FaceRecognition-2019/nist
+
+# Stash your environment variables in ~/.localrc. This means they'll stay out
+# of your main dotfiles repository (which may be public, like this one), but
+# you'll have access to them in your scripts.
+if [[ -a ~/.localrc ]]
+then
+  source ~/.localrc
+fi
+
+# all of our zsh files
+typeset -U config_files
+config_files=($ZSH/**/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}
+do
+  source $file
+done
+
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  source $file
+done
+
+# initialize autocomplete here, otherwise functions won't be loaded
+autoload -U compinit
+compinit
+
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}
+do
+  source $file
+done
+
+unset config_files
+
+# Better history
+# Credits to https://coderwall.com/p/jpj_6q/zsh-better-history-searching-with-arrow-keys
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search # Up
+bindkey "^[[B" down-line-or-beginning-search # Down
+alias python="python3"
+bindkey -e
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
+    _z_precmd() {
+        (_z --add "${PWD:a}" &)
+		: $RANDOM
+    }
+else
+    _z_precmd() {
+        (_z --add "${PWD:A}" &)
+		: $RANDOM
+    }
+fi
+
+alias python='/usr/bin/python3'
+alias python3='usr/bin/python3'
+
+# PM functions
+source ~/.pm/pm.zsh
+alias pma="pm add"
+alias pmg="pm go"
+alias pmrm="pm remove"
+alias pml="pm list"
+# end PM
+
+
+alias ll='ls -lht' #按修改时间逆序列出文件
+alias la='ls -lhta' #按修改时间逆序列出所有文件
+alias size='f(){ du -sh $1* | sort -hr; }; f'
+

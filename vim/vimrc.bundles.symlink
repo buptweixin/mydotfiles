@@ -1,0 +1,364 @@
+" ==========================================
+" bundle 插件管理和配置项
+" ==========================================
+"------------------------------------------- begin of configs --------------------------------------------
+
+" ################### 包依赖 #####################
+" package dependence:  ctags, ag(he_silver_searcher)
+" python dependence:   pep8, pyflake
+
+" 非兼容vi模式。去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限
+set nocompatible
+filetype off " required! turn off
+
+" ################### 插件管理 ###################
+
+" inspired by spf13, 自定义需要的插件集合
+if !exists('g:bundle_groups')
+    let g:bundle_groups=['python', 'tmux']
+endif
+
+if &compatible
+  set nocompatible
+endif
+
+" 安装插件管理器
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/test')
+
+" vim 使用nvim的插件需要下面俩插件的帮助
+if !has('nvim')
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+" solarized
+Plug 'altercation/vim-colors-solarized'
+" 自动补全框架， 既快又好
+" dependences python-language-server :coc-pyls :coc-json :coc-ulti :coc-ultisnips
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+" 在命令行部分显示参数信息
+Plug 'Shougo/echodoc.vim'
+
+" 生成function doc
+Plug 'heavenshell/vim-pydocstring', {'for': 'python', 'on': 'Pydocstring'}
+
+" airline, 美化状态栏和标签栏
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" 自动配对括号
+Plug 'Raimondi/delimitMate'
+
+" 注释
+Plug 'scrooloose/nerdcommenter'
+
+" 高效地移动, [,, + w/fx/h/j/k/l]
+Plug 'Lokaltog/vim-easymotion'
+
+" signature, 方便的标签和跳转
+Plug 'kshenoy/vim-signature'
+
+" 多光标选中和编辑
+Plug 'terryma/vim-multiple-cursors'
+
+" 快速文件搜索
+Plug 'Yggdroot/LeaderF', {'on': ['LeaderfFile', 'LeaderfMru', 'LeaderfFunction', 'LeaderfBuffer']}
+
+" 快速字符串查找
+Plug 'rking/ag.vim'
+
+" git
+Plug 'airblade/vim-gitgutter', {'on': 'GitGutterToggle'}
+
+" 括号显示增强
+Plug 'kien/rainbow_parentheses.vim'
+
+" python
+""""""""""
+" isort
+" 排序Python import modules
+Plug 'fisadev/vim-isort', {'on': 'Isort'}
+
+" python-syntax 更好的python高亮
+Plug 'hdima/python-syntax', {'for': 'python'}
+
+" Track the engine.
+Plug 'SirVer/ultisnips'
+" nippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+
+call plug#end()
+
+"""""""""""""""""""""""""""""""""""""""
+"              配置信息
+"""""""""""""""""""""""""""""""""""""""
+""" ultisnips {{{
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+""" }}}
+""" python-syntax {{{
+let python_highlight_all = 1
+""" }}}
+
+""" isort {{{
+let g:ale_python_isort_executable = 'isort'
+let g:ale_python_isort_use_global = 1
+" Shift-V 上下选中, ,i 规范化
+let g:vim_isort_map = '<c-i>'
+let g:vim_isort_python_version = 'python3'
+""" }}}
+
+""" solarized {{{
+let g:solarized_termtrans=1
+let g:solarized_contrast="normal"
+let g:solarized_visibility="normal"
+" let g:solarized_termcolors=256
+""" }}}
+""" rainbow_parentheses {{{
+" 不加入这行, 防止黑色括号出现, 很难识别
+" \ ['black',       'SeaGreen3'],
+let g:rbpt_colorpairs = [
+            \ ['brown',       'RoyalBlue3'],
+            \ ['Darkblue',    'SeaGreen3'],
+            \ ['darkgray',    'DarkOrchid3'],
+            \ ['darkgreen',   'firebrick3'],
+            \ ['darkcyan',    'RoyalBlue3'],
+            \ ['darkred',     'SeaGreen3'],
+            \ ['darkmagenta', 'DarkOrchid3'],
+            \ ['brown',       'firebrick3'],
+            \ ['gray',        'RoyalBlue3'],
+            \ ['darkmagenta', 'DarkOrchid3'],
+            \ ['Darkblue',    'firebrick3'],
+            \ ['darkgreen',   'RoyalBlue3'],
+            \ ['darkcyan',    'SeaGreen3'],
+            \ ['darkred',     'DarkOrchid3'],
+            \ ['red',         'firebrick3'],
+            \ ]
+
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+""" }}}
+
+
+""" gitgutter {{{
+" 同git diff,实时展示文件中修改的行
+" 只是不喜欢除了行号多一列, 默认关闭,gs时打开
+let g:gitgutter_map_keys = 0
+let g:gitgutter_enabled = 0
+let g:gitgutter_highlight_lines = 1
+nnoremap <leader>tg :GitGutterToggle<CR>
+""" }}}
+
+""" ag {{{
+noremap <leader>f :Ag<space>--noaffinity<space>
+let g:ag_mapping_message=0
+""" }}}
+
+""" leaderf {{{
+let g:Lf_NormalMap = {
+	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
+	\ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
+	\ "Mru":    [["<ESC>", ':exec g:Lf_py "mruExplManager.quit()"<CR>']],
+	\ "Tag":    [["<ESC>", ':exec g:Lf_py "tagExplManager.quit()"<CR>']],
+	\ "Function":    [["<ESC>", ':exec g:Lf_py "functionExplManager.quit()"<CR>']],
+	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
+	\ }
+let g:Lf_ShortcutF = '<c-p>'
+let g:Lf_ShortcutB = '<m-n>'
+map <C-p> :LeaderfFile<CR>
+map <C-n> :LeaderfMru<CR>
+map <m-p> :LeaderfFunction<CR>
+map <m-n> :LeaderfBuffer<CR>
+let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
+let g:Lf_WorkingDirectoryMode = 'Ac'
+let g:Lf_WindowHeight = 0.30
+let g:Lf_CacheDirectory = expand('~/.vim/cache')
+let g:Lf_ShowRelativePath = 0
+let g:Lf_HideHelp = 1
+let g:Lf_StlColorscheme = 'powerline'
+let g:Lf_PreviewResult = {'Function':0, 'BufTag':0, 'Colorscheme':1}
+let g:Lf_WildIgnore = {
+            \ 'dir': ['.svn','.git','.hg'],
+            \ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+            \}
+let g:Lf_MruFileExclude = ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+let g:Lf_DefaultExternalTool = 'ag'
+let g:Lf_RootMarkers = ['.git', '.hg', '.svn', '.project', '.root']
+""" }}}
+
+""" multiple-cursors {{{
+let g:multi_cursor_use_default_mapping=0
+" Default mapping
+let g:multi_cursor_next_key='<C-m>'
+let g:multi_cursor_prev_key='<C-p>'
+let g:multi_cursor_skip_key='<C-x>'
+let g:multi_cursor_quit_key='<Esc>'
+""" }}}
+
+""" signature {{{
+" signature
+" " 显示marks - 方便自己进行标记和跳转
+" " m[a-zA-Z] add mark
+" " '[a-zA-Z] go to mark
+" " m<Space>  del all marks
+" " m/        list all marks
+" " m.        add new mark just follow previous mark
+""" }}}
+
+""" easymotion {{{
+let g:EasyMotion_smartcase = 1
+"let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+map <Leader><leader>h <Plug>(easymotion-linebackward)
+map <Leader><Leader>j <Plug>(easymotion-j)
+map <Leader><Leader>k <Plug>(easymotion-k)
+map <Leader><leader>l <Plug>(easymotion-lineforward)
+" 重复上一次操作, 类似repeat插件, 很强大
+map <Leader><leader>. <Plug>(easymotion-repeat)
+""" }}}
+
+""" nerdcommenter {{{
+" comment
+" quick edit
+" " 快速注释
+" " <leader>cc 加注释
+" " <leader>cu 解开注释
+" " <leader>c<space>  加上/解开注释, 智能判断
+" " <leader>cy   先复制, 再注解(p可以进行黏贴)
+let g:NERDSpaceDelims=1
+let g:NERDAltDelims_python = 1
+""" }}}
+""" delimitMate {{{
+" for python docstring ",优化输入
+au FileType python let b:delimitMate_nesting_quotes = ['"']
+au FileType python let delimitMate_matchpairs  = "(:),[:],{:}"
+" 关闭某些类型文件的自动补全
+au FileType txt let b:delimitMate_autoclose = 0
+""" }}}
+
+""" airline {{{
+    if !exists('g:airline_symbols')
+        let g:airline_symbols = {}
+    endif
+    let g:airline_left_sep = '▶'
+    let g:airline_left_alt_sep = '❯'
+    let g:airline_right_sep = '◀'
+    let g:airline_right_alt_sep = '❮'
+    let g:airline_symbols.linenr = '¶'
+    let g:airline_symbols.branch = '⎇'
+    let g:airline_theme='simple'
+    let g:airline_detect_spell=0
+    " 是否打开tabline
+    let g:airline#extensions#tabline#enabled = 1
+""" }}}
+
+""" pydocstring {{{
+nnoremap <Leader>ld :Pydocstring<cr>
+""" }}}
+
+
+""" echodoc {{{
+set cmdheight=2
+""" }}}
+
+""" coc {{{
+" Remap keys for gotos
+nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> <leader>jd <Plug>(coc-type-definition)
+nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> <leader>u <Plug>(coc-references)
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" always show signcolumns
+set signcolumn=yes
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+" Use <c-space> for trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+" Remap for rename current word
+nmap <leader>nn <Plug>(coc-rename)
+" Remap for format selected region
+vmap <leader>lf  <Plug>(coc-format-selected)
+nmap <leader>lf  <Plug>(coc-format-selected)
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType python,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+vmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+" Use `:Format` for format current buffer
+command! -nargs=0 Format :call CocAction('format')
+" Use `:Fold` for fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+" Add diagnostic info for https://github.com/itchyny/lightline.vim
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
+let g:coc_snippet_next = '<c-j>'
+let g:coc_snippet_prev = '<c-k>'
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+
+
+" airline
+let g:airline#extensions#disable_rtp_load = 1
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+""" }}}
+
+
