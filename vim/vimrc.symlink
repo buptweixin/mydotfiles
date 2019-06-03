@@ -285,6 +285,7 @@ function! HideNumber()
     set relativenumber!
   endif
   set number?
+  set signcolumn=no
 endfunc
 nnoremap <F2> :call HideNumber()<CR>
 " F3 显示可打印字符开关
@@ -331,6 +332,10 @@ nnoremap <silent> <Leader>z :ZoomToggle<CR>
 " Go to home and end using capitalized directions
 noremap H ^
 noremap L $
+map <C-a> <Nop>
+map <C-x> <Nop>
+inoremap <C-a> <C-o>0
+inoremap <C-e> <C-o>$
 
 " Map ; to : and save a million keystrokes 用于快速进入命令行
 nnoremap ; :
@@ -511,7 +516,6 @@ endif
 "==========================================
 " TEMP 设置, 尚未确定要不要
 "==========================================
-
 " beta
 " https://dougblack.io/words/a-good-vimrc.html
 set lazyredraw          " redraw only when we need to.

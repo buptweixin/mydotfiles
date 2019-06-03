@@ -38,8 +38,12 @@ if !has('nvim')
 endif
 " solarized
 Plug 'altercation/vim-colors-solarized'
+" 自动格式化代码
+" Plug 'tell-k/vim-autopep8'
+" tagbar升级版 vista.vim, 可查看LSP的symbols和ctags等
+" Plug 'liuchengxu/vista.vim'
 " 自动补全框架， 既快又好
-" dependences python-language-server :coc-pyls :coc-json :coc-ulti :coc-ultisnips
+" dependences python-language-server :coc-python :coc-json :coc-ulti :coc-ultisnips
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 " 在命令行部分显示参数信息
 Plug 'Shougo/echodoc.vim'
@@ -80,9 +84,6 @@ Plug 'kien/rainbow_parentheses.vim'
 
 " python
 """"""""""
-" isort
-" 排序Python import modules
-Plug 'fisadev/vim-isort', {'on': 'Isort'}
 
 " python-syntax 更好的python高亮
 Plug 'hdima/python-syntax', {'for': 'python'}
@@ -97,6 +98,15 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""
 "              配置信息
 """""""""""""""""""""""""""""""""""""""
+""" autopep8 {{{
+autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
+let g:autopep8_ignore=""
+" let g:autopep8_pep8_passes=100
+let g:autopep8_indent_size=4
+let g:autopep8_disable_show_diff=1
+" let g:autopep8_on_save = 1
+""" }}}
+
 """ ultisnips {{{
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -110,13 +120,6 @@ let g:UltiSnipsEditSplit="vertical"
 let python_highlight_all = 1
 """ }}}
 
-""" isort {{{
-let g:ale_python_isort_executable = 'isort'
-let g:ale_python_isort_use_global = 1
-" Shift-V 上下选中, ,i 规范化
-let g:vim_isort_map = '<c-i>'
-let g:vim_isort_python_version = 'python3'
-""" }}}
 
 """ solarized {{{
 let g:solarized_termtrans=1
@@ -277,10 +280,10 @@ set cmdheight=2
 
 """ coc {{{
 " Remap keys for gotos
-nmap <silent> <leader>gd <Plug>(coc-definition)
-nmap <silent> <leader>jd <Plug>(coc-type-definition)
-nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>u <Plug>(coc-references)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
 " always show signcolumns
@@ -316,7 +319,7 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 " Remap for rename current word
-nmap <leader>nn <Plug>(coc-rename)
+nmap <leader>rn <Plug>(coc-rename)
 " Remap for format selected region
 vmap <leader>lf  <Plug>(coc-format-selected)
 nmap <leader>lf  <Plug>(coc-format-selected)
@@ -354,8 +357,29 @@ let g:coc_snippet_next = '<c-j>'
 let g:coc_snippet_prev = '<c-k>'
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <leader>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
+
 
 " airline
+" if you want to disable auto detect, comment out those two lines
+let g:airline#extensions#disable_rtp_load = 1
+let g:airline_extensions = ['branch', 'coc']
 let g:airline#extensions#disable_rtp_load = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'

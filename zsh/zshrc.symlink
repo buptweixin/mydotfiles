@@ -6,14 +6,13 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle autojump
+antigen bundle mafredri/zsh-async
+antigen bundle sindresorhus/pure
 # antigen theme zlsun/avit-mod
-antigen bundle skywind3000/z.lua
+# antigen bundle skywind3000/z.lua
 antigen apply
 
 export _ZL_MATCH_MODE=1
-
-# your project folder that we can `c [tab]` to
-export PROJECTS=/home/weixin/FaceRecognition-2019/nist
 
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but
@@ -59,7 +58,6 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
-alias python="python3"
 bindkey -e
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -76,24 +74,9 @@ else
 fi
 
 alias python='/usr/bin/python3'
-alias python3='usr/bin/python3'
-
-# PM functions
-source ~/.pm/pm.zsh
-alias pma="pm add"
-alias pmg="pm go"
-alias pmrm="pm remove"
-alias pml="pm list"
-# end PM
-
+alias python3='/usr/bin/python3'
 
 alias ll='ls -lht' #按修改时间逆序列出文件
 alias la='ls -lhta' #按修改时间逆序列出所有文件
 alias size='f(){ du -sh $1* | sort -hr; }; f'
-
-
-# MegFace v2
-export LD_LIBRARY_PATH=/opt/megface-v2/lib:$LD_LIBRARY_PATH
-export PYTHONPATH=/opt/megface-v2/python:$PYTHONPATH
-export PATH=/unsullied/sharefs/_rsde/sdk/megface-v2/utils:$PATH
-
+export EDITOR=vim
