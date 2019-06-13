@@ -9,7 +9,7 @@ antigen bundle autojump
 antigen bundle mafredri/zsh-async
 antigen bundle sindresorhus/pure
 # antigen theme zlsun/avit-mod
-# antigen bundle skywind3000/z.lua
+antigen bundle skywind3000/z.lua
 antigen apply
 
 export _ZL_MATCH_MODE=1

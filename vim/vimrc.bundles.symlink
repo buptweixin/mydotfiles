@@ -38,6 +38,9 @@ if !has('nvim')
 endif
 " solarized
 Plug 'altercation/vim-colors-solarized'
+" One Dark theme
+Plug 'joshdick/onedark.vim'
+Plug 'sheerun/vim-polyglot'
 " 自动格式化代码
 " Plug 'tell-k/vim-autopep8'
 " tagbar升级版 vista.vim, 可查看LSP的symbols和ctags等
@@ -78,6 +81,7 @@ Plug 'rking/ag.vim'
 
 " git
 Plug 'airblade/vim-gitgutter', {'on': 'GitGutterToggle'}
+Plug 'tpope/vim-fugitive'
 
 " 括号显示增强
 Plug 'kien/rainbow_parentheses.vim'
@@ -109,6 +113,7 @@ let g:autopep8_disable_show_diff=1
 
 """ ultisnips {{{
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+map <leader>us :UltiSnipsEdit<CR>
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
@@ -126,6 +131,10 @@ let g:solarized_termtrans=1
 let g:solarized_contrast="normal"
 let g:solarized_visibility="normal"
 " let g:solarized_termcolors=256
+""" }}}
+
+""" onedark {{{
+let g:onedark_terminal_italics=1
 """ }}}
 """ rainbow_parentheses {{{
 " 不加入这行, 防止黑色括号出现, 很难识别
@@ -263,7 +272,7 @@ au FileType txt let b:delimitMate_autoclose = 0
     let g:airline_right_alt_sep = '❮'
     let g:airline_symbols.linenr = '¶'
     let g:airline_symbols.branch = '⎇'
-    let g:airline_theme='simple'
+    let g:airline_theme='onedark'
     let g:airline_detect_spell=0
     " 是否打开tabline
     let g:airline#extensions#tabline#enabled = 1
@@ -321,8 +330,9 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 " Remap for format selected region
-vmap <leader>lf  <Plug>(coc-format-selected)
-nmap <leader>lf  <Plug>(coc-format-selected)
+vmap <leader>p  <Plug>(coc-format-selected)
+nmap <leader>p  <Plug>(coc-format-selected)
+nmap <leader>lf <Plug>(coc-format)
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s).
@@ -333,6 +343,9 @@ augroup end
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 vmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+nmap <leader>en <Plug>(coc-diagnostic-next)
+nmap <leader>ep <Plug>(coc-diagnostic-prev)
 
 " Remap for do codeAction of current line
 nmap <leader>ac  <Plug>(coc-codeaction)
@@ -355,6 +368,7 @@ let g:lightline = {
       \ }
 let g:coc_snippet_next = '<c-j>'
 let g:coc_snippet_prev = '<c-k>'
+imap <C-j> <Plug>(coc-snippets-expand-jump)
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " Using CocList
@@ -373,7 +387,8 @@ nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
+" nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
+
 
 
 " airline
