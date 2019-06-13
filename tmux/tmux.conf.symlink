@@ -19,8 +19,6 @@ set -g escape-time 50                     # faster command sequences
 set -sg repeat-time 6                   # increase repeat timeout
 set -s focus-events on
 
-set -g prefix2 C-a                        # GNU-Screen compatible prefix
-bind C-a send-prefix -2
 set-window-option -g mode-keys vi
 
 set -q -g status-utf8 on                  # expect UTF-8 (tmux < 2.2)
@@ -89,8 +87,6 @@ bind -r K resize-pane -U 2
 bind -r L resize-pane -R 2
 
 # window navigation
-unbind n
-unbind p
 bind -r C-h previous-window # select previous window
 bind -r C-l next-window     # select next window
 bind Tab last-window        # move to last active window
@@ -180,7 +176,7 @@ if '[ -f ~/.tmux.conf.local ]' 'source ~/.tmux.conf.local'
 
 # -- 8< ------------------------------------------------------------------------
 
-run 'cut -c3- ~/.tmux.conf | sh -s _apply_configuration'
+# run 'cut -c3- ~/.tmux.conf | sh -s _apply_configuration'
 
 
 # EOF
@@ -1140,3 +1136,4 @@ run 'cut -c3- ~/.tmux.conf | sh -s _apply_configuration'
 # }
 #
 # "$@"
+
