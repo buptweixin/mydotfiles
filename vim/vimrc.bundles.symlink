@@ -80,8 +80,8 @@ Plug 'Yggdroot/LeaderF', {'on': ['LeaderfFile', 'LeaderfMru', 'LeaderfFunction',
 Plug 'rking/ag.vim'
 
 " git
-Plug 'airblade/vim-gitgutter', {'on': 'GitGutterToggle'}
-Plug 'tpope/vim-fugitive'
+" Plug 'airblade/vim-gitgutter', {'on': 'GitGutterToggle'}
+" Plug 'tpope/vim-fugitive'
 
 " 括号显示增强
 Plug 'kien/rainbow_parentheses.vim'
