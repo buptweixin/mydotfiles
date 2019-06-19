@@ -1,7 +1,7 @@
 # https://github.com/gpakosz/.tmux
 # (‑●‑●)> released under the WTFPL v2 license, by Gregory Pakosz (@gpakosz)
-bind-key \ split-window -h
-bind-key - split-window -v
+bind-key \ split-window -h -c "#{pane_current_path}"
+bind-key - split-window -v -c "#{pane_current_path}"
 
 
 # -- navigation ----------------------------------------------------------------
@@ -19,7 +19,7 @@ bind-key - split-window -v
 # new window retains current path, possible values are:
 #   - true
 #   - false (default)
-tmux_conf_new_window_retain_current_path=false
+tmux_conf_new_window_retain_current_path=true
 
 # new pane retains current path, possible values are:
 #   - true (default)
@@ -42,7 +42,7 @@ tmux_conf_new_session_prompt=false
 # RGB 24-bit colour support (tmux >= 2.2), possible values are:
 #  - true
 #  - false (default)
-tmux_conf_theme_24b_colour=false
+tmux_conf_theme_24b_colour=true
 
 # window style
 tmux_conf_theme_window_fg='default'
@@ -51,7 +51,7 @@ tmux_conf_theme_window_bg='default'
 # highlight focused pane (tmux >= 2.1), possible values are:
 #   - true
 #   - false (default)
-tmux_conf_theme_highlight_focused_pane=false
+tmux_conf_theme_highlight_focused_pane=true
 
 # focused pane colours:
 tmux_conf_theme_focused_pane_fg='default'
@@ -126,14 +126,14 @@ tmux_conf_theme_window_status_last_bg='default'
 tmux_conf_theme_window_status_last_attr='none'
 
 # status left/right sections separators
-tmux_conf_theme_left_separator_main=''
-tmux_conf_theme_left_separator_sub='|'
-tmux_conf_theme_right_separator_main=''
-tmux_conf_theme_right_separator_sub='|'
-#tmux_conf_theme_left_separator_main=''  # /!\ you don't need to install Powerline
-#tmux_conf_theme_left_separator_sub=''   #   you only need fonts patched with
-#tmux_conf_theme_right_separator_main='' #   Powerline symbols or the standalone
-#tmux_conf_theme_right_separator_sub=''  #   PowerlineSymbols.otf font
+# tmux_conf_theme_left_separator_main=''
+# tmux_conf_theme_left_separator_sub='|'
+# tmux_conf_theme_right_separator_main=''
+# tmux_conf_theme_right_separator_sub='|'
+tmux_conf_theme_left_separator_main=''  # /!\ you don't need to install Powerline
+tmux_conf_theme_left_separator_sub=''   #   you only need fonts patched with
+tmux_conf_theme_right_separator_main='' #   Powerline symbols or the standalone
+tmux_conf_theme_right_separator_sub=''  #   PowerlineSymbols.otf font
 
 # status left/right content:
 #   - separate main sections with '|'
@@ -238,26 +238,31 @@ tmux_conf_theme_clock_style='24'
 #   - true
 #   - false (default)
 # on macOS, this require installing reattach-to-user-namespace, see README.md
-tmux_conf_copy_to_os_clipboard=false
+tmux_conf_copy_to_os_clipboard=true
 
 
 # -- user customizations -------------------------------------------------------
 # this is the place to override or undo settings
 
 # increase history size
-#set -g history-limit 10000
+set -g history-limit 10000
 
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
-#set -g status-keys vi
-#set -g mode-keys vi
+set -g status-keys vi
+set -g mode-keys vi
 
 # replace C-b by C-a instead of using both prefixes
-# set -gu prefix2
-# unbind C-a
-# unbind C-b
-# set -g prefix C-a
-# bind C-a send-prefix
+set -gu prefix2
+unbind C-a
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
+
+unbind n
+bind -r n next-window     # select next window
+unbind p
+bind -r p previous-window     # select previous window
 
 # move status line to top
-#set -g status-position top
+# set -g status-position top
