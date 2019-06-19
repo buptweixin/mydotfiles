@@ -148,6 +148,9 @@ fun! ToggleFold()
     endif
 endfun
 
+" zO 局部展开, zC 局部折叠, zR 全部展开
+nnoremap zpr :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>:set foldmethod=manual<CR><CR>
+
 " 缩进配置
 " Smart indent
 set smartindent
