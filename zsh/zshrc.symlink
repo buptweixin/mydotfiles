@@ -1,5 +1,5 @@
 # shortcut to this dotfiles path is $ZSH
-sudo chsh $USER -s /usr/bin/zsh
+chsh $USER -s /usr/bin/zsh
 export ZSH=$HOME/.dotfiles
 source ~/.antigen.zsh
 antigen bundle zsh-users/zsh-syntax-highlighting
@@ -81,5 +81,9 @@ alias vi="vim"
 alias ll='ls -lht' #按修改时间逆序列出文件
 alias la='ls -lhta' #按修改时间逆序列出所有文件
 alias size='f(){ du -sh $1* | sort -hr; }; f'
-export EDITOR=vim
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+export EDITOR=nvim
+export PATH=$HOME/bin:$PATH
+alias vim=nvim
+alias vi=nvim
+export VIMRUNTIME=$HOME/bin/nvim
+export VIM=$HOME/bin/nvim
