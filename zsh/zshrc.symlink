@@ -85,5 +85,4 @@ export EDITOR=nvim
 export PATH=$HOME/bin:$PATH
 alias vim=nvim
 alias vi=nvim
-export VIMRUNTIME=$HOME/bin/nvim
-export VIM=$HOME/bin/nvim
+
