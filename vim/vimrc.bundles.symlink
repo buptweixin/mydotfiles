@@ -42,11 +42,6 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'joshdick/onedark.vim'
 Plug 'sheerun/vim-polyglot'
 " 自动格式化代码
-" Plug 'tell-k/vim-autopep8'
-" tagbar升级版 vista.vim, 可查看LSP的symbols和ctags等
-" Plug 'liuchengxu/vista.vim'
-" 自动补全框架， 既快又好
-" dependences python-language-server :coc-python :coc-json :coc-ulti :coc-ultisnips
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 " 在命令行部分显示参数信息
 Plug 'Shougo/echodoc.vim'
@@ -57,9 +52,6 @@ Plug 'heavenshell/vim-pydocstring', {'for': 'python', 'on': 'Pydocstring'}
 " airline, 美化状态栏和标签栏
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-
-" 自动配对括号
-Plug 'Raimondi/delimitMate'
 
 " 注释
 Plug 'scrooloose/nerdcommenter'
@@ -115,8 +107,8 @@ let g:autopep8_disable_show_diff=1
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 map <leader>us :UltiSnipsEdit<CR>
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
@@ -288,7 +280,7 @@ set cmdheight=2
 """ }}}
 
 """ coc {{{
-let g:coc_global_extensions=['coc-python', 'coc-lists', 'coc-json', 'coc-ultisnips', 'coc-git']
+let g:coc_global_extensions=['coc-python', 'coc-lists', 'coc-json', 'coc-ultisnips', 'coc-git', 'coc-pairs']
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -370,10 +362,9 @@ let g:lightline = {
       \ }
 let g:coc_snippet_next = '<c-j>'
 let g:coc_snippet_prev = '<c-k>'
-imap <C-j> <Plug>(coc-snippets-expand-jump)
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
-" Using CocList
+" Using CocList {
 " Show all diagnostics
 nnoremap <silent> <leader>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
@@ -388,18 +379,17 @@ nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
 nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
-" Resume latest coc list
-" nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
+" }
 
-
-
-" airline
+" airline {
 " if you want to disable auto detect, comment out those two lines
 let g:airline#extensions#disable_rtp_load = 1
 let g:airline_extensions = ['branch', 'coc']
 let g:airline#extensions#disable_rtp_load = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+" }
+
 """ }}}
 
 
