@@ -1,5 +1,4 @@
 # shortcut to this dotfiles path is $ZSH
-sudo chsh $USER -s /usr/bin/zsh
 export ZSH=$HOME/.dotfiles
 source ~/.antigen.zsh
 antigen bundle zsh-users/zsh-syntax-highlighting
