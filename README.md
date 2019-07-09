@@ -49,10 +49,13 @@ There's a few special files in the hierarchy.
 ## install
 
 Run this:
+Prerequirements
+[neovim](https://github.com/neovim/neovim)
 
 ```sh
 git clone https://github.com/buptweixin/mydotfiles.git ~/.dotfiles
 cd ~/.dotfiles
+git checkout nobrew
 script/bootstrap
 ```
 
@@ -75,7 +78,7 @@ said, I do use this as *my* dotfiles, so there's a good chance I may break
 something if I forget to make a check for a dependency.
 
 If you're brand-new to the project and run into any blockers, please
-[open an issue](https://github.com/holman/dotfiles/issues) on this repository
+[open an issue](https://github.com/buptweixin/mydotfiles/issues) on this repository
 and I'd love to get it fixed for you!
 
 ## thanks
