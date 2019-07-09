@@ -48,9 +48,11 @@ There's a few special files in the hierarchy.
 
 ## install
 
-Run this:
-Prerequirements
+Prerequirements:
+
 [neovim](https://github.com/neovim/neovim)
+
+Run this:
 
 ```sh
 git clone https://github.com/buptweixin/mydotfiles.git ~/.dotfiles
