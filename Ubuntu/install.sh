@@ -6,11 +6,14 @@ if test "$(uname)" = "Linux"; then
 	        curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 	        echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 	        curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-                sudo apt-get update && apt-get install -y \
+                sudo apt-get update && sudo apt-get install -y \
 	            silversearcher-ag \
 		        nodejs \
 	            yarn \
 		        zsh
+            sudo add-apt-repository ppa:neovim-ppa/unstable -y
+            sudo apt-get update -y
+            sudo apt-get install neovim -y
 	    else
             cp sources.list /etc/apt/sources.list
 	        curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -18,9 +21,12 @@ if test "$(uname)" = "Linux"; then
 	        curl -sL https://deb.nodesource.com/setup_12.x | bash -
                 apt-get update && apt-get install -y \
 	            silversearcher-ag \
-	    	nodejs \
+                nodejs \
 	            yarn \
-	    	zsh
+                zsh
+            add-apt-repository ppa:neovim-ppa/unstable -y
+            apt-get update -y
+            apt-get install neovim -y
 	    fi
     fi
 fi
