@@ -34,3 +34,5 @@
 [user]
 	name = Wei Xin
 	email = weixin@megvii.com
+[url "“https://”"]
+	insteadOf = git://
