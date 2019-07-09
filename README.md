@@ -48,11 +48,16 @@ There's a few special files in the hierarchy.
 
 ## install
 
+Prerequirements:
+
+[neovim](https://github.com/neovim/neovim)
+
 Run this:
 
 ```sh
-git clone https://github.com/holman/dotfiles.git ~/.dotfiles
+git clone https://github.com/buptweixin/mydotfiles.git ~/.dotfiles
 cd ~/.dotfiles
+git checkout nobrew
 script/bootstrap
 ```
 
