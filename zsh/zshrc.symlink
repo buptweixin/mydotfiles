@@ -11,8 +11,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle autojump
 antigen bundle mafredri/zsh-async
-antigen bundle sindresorhus/pure
-# antigen theme zlsun/avit-mod
+antigen theme refined
 antigen bundle skywind3000/z.lua
 antigen apply
 
