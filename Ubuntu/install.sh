@@ -2,7 +2,7 @@
 if test "$(uname)" = "Linux"; then
     if hash apt 2>/dev/null; then
         if hash sudo 2>/dev/null; then
-            basedir=$(pwd)
+            basedir=$(cd "$(dirname "$0")";pwd)
             sudo cp ${basedir}/sources.list /etc/apt/sources.list
             curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
             echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -18,7 +18,7 @@ if test "$(uname)" = "Linux"; then
             sudo apt-get install neovim -y
             sudo locale-gen zh_CN.UTF-8
 	    else
-            basedir=$(pwd)
+            basedir=$(cd "$(dirname "$0")";pwd)
             sudo cp ${basedir}/sources.list /etc/apt/sources.list
             cp sources.list /etc/apt/sources.list
 	        curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
