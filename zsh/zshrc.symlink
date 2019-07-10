@@ -3,7 +3,6 @@ export LANG="zh_CN.UTF-8"
 export LANGUAGE="zh_CN:zh"
 export LC_ALL="zh_CN.UTF-8"
 
-chsh $USER -s /usr/bin/zsh
 export ZSH=$HOME/.dotfiles
 source ~/.antigen.zsh
 antigen bundle zsh-users/zsh-syntax-highlighting
