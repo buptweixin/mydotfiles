@@ -10,3 +10,7 @@ atom.symlink/blob-store
 atom.symlink/recovery
 
 git/gitconfig.local.symlink
+
+__pycache__/
+node_modules/
+yarn.lock
