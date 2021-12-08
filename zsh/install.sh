@@ -1,12 +1,12 @@
 #!/bin/bash
 
-echo "install antigen"
-# download antigen
-echo "Install antigen..."
-if [ -f ~/.antigen.zsh ]; then
-  echo "antigen has been installed."
+echo "install zgen"
+# download zgen
+echo "Install zgen..."
+if [ -d ${HOME}/.zgen ]; then
+  echo "zgen has been installed."
 else
-  curl -L git.io/antigen > ~/.antigen.zsh
+    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 fi
 
 if [ -d ~/.fzf ]; then

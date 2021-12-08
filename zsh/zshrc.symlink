@@ -1,15 +1,42 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # shortcut to this dotfiles path is $ZSH
 export ZSH=$HOME/.dotfiles
-source ~/.antigen.zsh
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-history-substring-search
-antigen bundle autojump
-antigen bundle mafredri/zsh-async
-antigen bundle sindresorhus/pure
-# antigen theme zlsun/avit-mod
-antigen bundle skywind3000/z.lua
-antigen apply
+# load zgen
+source "${HOME}/.zgen/zgen.zsh"
+
+# if the init scipt doesn't exist
+if ! zgen saved; then
+    echo "Creating a zgen save"
+
+    # plugins
+    zgen oh-my-zsh plugins/git
+    zgen load zsh-users/zsh-syntax-highlighting
+    zgen load zsh-users/zsh-autosuggestions
+    zgen load mafredri/zsh-async
+    zgen load sindresorhus/pure
+
+    # bulk load
+    zgen loadall <<EOPLUGINS
+        zsh-users/zsh-history-substring-search
+EOPLUGINS
+    # ^ can't indent this EOPLUGINS
+
+    # completions
+    zgen load zsh-users/zsh-completions src
+
+    # theme
+    zgen load romkatv/powerlevel10k powerlevel10k
+
+    # save all to init script
+    zgen save
+fi
+
 
 export _ZL_MATCH_MODE=1
 
@@ -22,8 +49,8 @@ then
 fi
 
 # all of our zsh files
-typeset -U config_files
-config_files=($ZSH/**/*.zsh)
+# typeset -U config_files
+# config_files=($ZSH/**/*.zsh)
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}
@@ -81,4 +108,14 @@ alias ll='ls -lht' #按修改时间逆序列出文件
 alias la='ls -lhta' #按修改时间逆序列出所有文件
 alias size='f(){ du -sh $1* | sort -hr; }; f'
 export EDITOR=vim
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+case `uname` in
+  Darwin)
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  ;;
+  Linux)
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  ;;
+esac
