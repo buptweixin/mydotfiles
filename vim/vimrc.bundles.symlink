@@ -280,7 +280,7 @@ set cmdheight=2
 """ }}}
 
 """ coc {{{
-let g:coc_global_extensions=['coc-python', 'coc-lists', 'coc-json', 'coc-ultisnips', 'coc-git', 'coc-pairs']
+let g:coc_global_extensions=['coc-pyright', 'coc-lists', 'coc-json', 'coc-ultisnips', 'coc-git', 'coc-pairs']
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
