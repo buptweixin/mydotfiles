@@ -89,7 +89,7 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'hdima/python-syntax', {'for': 'python'}
 
 " Track the engine.
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 " nippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
 
