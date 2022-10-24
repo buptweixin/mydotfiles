@@ -16,26 +16,19 @@ return require('packer').startup(function()
 	use 'moll/vim-bbye' -- for more sensible delete buffer cmd
 
 	-- themes (disabled other themes to optimize startup time)
-	-- use 'sainnhe/sonokai'
 	use 'tiagovla/tokyodark.nvim'
-	-- use 'projekt0n/github-nvim-theme'
-	-- use 'joshdick/onedark.vim'
-	-- use { 'catppuccin/nvim', as='catppuccin' }
-	-- use { 'sonph/onehalf', rtp='vim/' }
-	-- use 'liuchengxu/space-vim-dark'
-	-- use 'ahmedabdulrahman/aylin.vim'
-	-- use "rebelot/kanagawa.nvim"
-	-- use 'NLKNguyen/papercolor-theme'
-	-- use 'liuchengxu/space-vim-dark'
-	-- use 'sainnhe/edge'
-	-- use 'B4mbus/oxocarbon-lua.nvim'
-	-- use 'Th3Whit3Wolf/one-nvim'
 
 	-- file tree
 	use {
 		'kyazdani42/nvim-tree.lua',
 		requires = 'kyazdani42/nvim-web-devicons'
 	}
+    use {
+        "ahmedkhalf/project.nvim",
+        config = function()
+            require("project_nvim").setup {}
+        end
+    }
 
 	-- language
     -- use { 'neoclide/coc.nvim', branch='release' }
@@ -54,6 +47,10 @@ return require('packer').startup(function()
 	use 'hrsh7th/cmp-buffer'
 	use 'hrsh7th/cmp-path'
 	use 'hrsh7th/cmp-cmdline'
+    use {
+        "windwp/nvim-autopairs",
+        config = function() require("nvim-autopairs").setup {} end
+    }
 	use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-vsnip'
     use 'hrsh7th/vim-vsnip'

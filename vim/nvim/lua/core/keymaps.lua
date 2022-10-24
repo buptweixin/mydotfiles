@@ -93,6 +93,7 @@ vim.keymap.set('n', '<leader>ff', ':NvimTreeFocus<cr>')
 -- paste mode
 vim.opt.pastetoggle = '<F6>'
 -- y: telescope
+require('telescope').load_extension('projects')
 vim.keymap.set('n', '<F7>', function() require 'telescope.builtin'.current_buffer_fuzzy_find {} end)
 vim.keymap.set('n', '<F8>', function() require 'telescope.builtin'.registers {} end)
 vim.keymap.set('n', '<F9>', function() require 'telescope.builtin'.find_files {} end)
