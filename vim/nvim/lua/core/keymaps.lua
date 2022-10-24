@@ -74,9 +74,6 @@ vim.keymap.set('n', '#', '*')
 vim.keymap.set('n', 'U', '<C-r>')
 
 
--- buffers
-vim.keymap.set('n', '[b', ':bprevious<cr>')
-vim.keymap.set('n', ']b', ':bnext<cr>')
 
 -- tabs
 vim.keymap.set('n', '<leader>1', '1gt')
@@ -94,7 +91,7 @@ vim.keymap.set('n', '<F3>', ':NvimTreeToggle<cr>')
 vim.keymap.set('n', '<leader>ft', ':NvimTreeToggle<cr>')
 vim.keymap.set('n', '<leader>ff', ':NvimTreeFocus<cr>')
 -- paste mode
-vim.opt.pastetoggle = '<F5>'
+vim.opt.pastetoggle = '<F6>'
 -- y: telescope
 vim.keymap.set('n', '<F7>', function() require 'telescope.builtin'.current_buffer_fuzzy_find {} end)
 vim.keymap.set('n', '<F8>', function() require 'telescope.builtin'.registers {} end)
@@ -113,9 +110,9 @@ vim.keymap.set('n', '<m-0>', '<c-w>>')
 vim.keymap.set('n', '<m-->', '<c-w>-')
 vim.keymap.set('n', '<m-=>', '<c-w>+')
 -- b: buffer
-vim.keymap.set('n', '<leader>bn', ':bn<cr>')
-vim.keymap.set('n', '<leader>bp', ':bp<cr>')
-vim.keymap.set('n', '<leader>bd', ':Bdelete<cr>')
+vim.keymap.set('n', '[b', ':bprevious<cr>')
+vim.keymap.set('n', ']b', ':bnext<cr>')
+vim.keymap.set('n', ']d', ':Bdelete<cr>')
 -- p: plugins
 vim.keymap.set('n', '<leader>pi', ':PackerInstall<cr>')
 vim.keymap.set('n', '<leader>pc', ':PackerClean<cr>')
@@ -141,9 +138,6 @@ vim.keymap.set('n', '<leader>lb', ':SymbolsOutline<cr>')
 vim.keymap.set('n', '<leader>la', ':Lspsaga code_action<cr>')
 vim.keymap.set('n', '<leader>lu', ':Lspsaga lsp_finder<cr>')
 vim.keymap.set('n', '<F12>', ':Lspsaga code_action<cr>')
-vim.keymap.set('n', '<leader>it', function() require('rust-tools.inlay_hints').toggle_inlay_hints() end)
-vim.keymap.set('n', '<leader>is', function() require('rust-tools.inlay_hints').set_inlay_hints() end)
-vim.keymap.set('n', '<leader>id', function() require('rust-tools.inlay_hints').diable_inlay_hints() end)
 vim.keymap.set('n', '<f4>', ':SymbolsOutline<cr>')
 
 vim.keymap.set('n', '<leader>gD', vim.lsp.buf.declaration)
@@ -181,3 +175,6 @@ vim.keymap.set('n', '<leader>hs', ':<C-U>Gitsigns select_hunk<CR>')
 -- indent of selection in virtual and normal mode
 vim.keymap.set({'n', 'v'}, '>', '>gv')
 vim.keymap.set({'n', 'v'}, '<', '<gv')
+
+-- comments
+

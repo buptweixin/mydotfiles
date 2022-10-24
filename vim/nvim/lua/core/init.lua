@@ -64,23 +64,23 @@ vim.opt.formatoptions = ''
 require("core.keymaps")
 --require("core.dvorak")	-- delete this line if you don't like using DVORAK
 require("core.plugins")
---require("core.gui")
+require("core.gui")
 -- disable some useless standard plugins to save startup time
 -- these features have been better covered by plugins
---vim.g.loaded_matchparen        = 1
---vim.g.loaded_matchit           = 1
---vim.g.loaded_logiPat           = 1
---vim.g.loaded_rrhelper          = 1
---vim.g.loaded_tarPlugin         = 1
---vim.g.loaded_gzip              = 1
---vim.g.loaded_zipPlugin         = 1
---vim.g.loaded_2html_plugin      = 1
---vim.g.loaded_shada_plugin      = 1
---vim.g.loaded_spellfile_plugin  = 1
---vim.g.loaded_netrw             = 1
---vim.g.loaded_netrwPlugin       = 1
---vim.g.loaded_tutor_mode_plugin = 1
---vim.g.loaded_remote_plugins    = 1
+vim.g.loaded_matchparen        = 1
+vim.g.loaded_matchit           = 1
+vim.g.loaded_logiPat           = 1
+vim.g.loaded_rrhelper          = 1
+vim.g.loaded_tarPlugin         = 1
+vim.g.loaded_gzip              = 1
+vim.g.loaded_zipPlugin         = 1
+vim.g.loaded_2html_plugin      = 1
+vim.g.loaded_shada_plugin      = 1
+vim.g.loaded_spellfile_plugin  = 1
+vim.g.loaded_netrw             = 1
+vim.g.loaded_netrwPlugin       = 1
+vim.g.loaded_tutor_mode_plugin = 1
+vim.g.loaded_remote_plugins    = 1
 require("core.theme")
 
 require('image').setup {
@@ -96,8 +96,8 @@ require('image').setup {
 --
 ---- Load plugin configs
 ---- plugins without extra configs are configured directly here
---require("impatient")
---
+require("impatient")
+
 require("configs.autocomplete").config()
 require("configs.symbols_outline").config()
 require("configs.statusline").config()
@@ -107,3 +107,5 @@ require("configs.startscreen").config()
 require("configs.git").config()
 require("configs.bufferline").config()
 require("configs.terminal").config()
+require("configs.comments").config()
+
