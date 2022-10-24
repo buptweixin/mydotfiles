@@ -2,6 +2,7 @@ local M = {}
 
 function M.config()
     -- Setup nvim-cmp.
+    local cmp_autopairs = require('nvim-autopairs.completion.cmp')
     local cmp = require 'cmp'
     local lspkind = require('lspkind')
     vim.g.copilot_no_tab_map = true
@@ -47,6 +48,11 @@ function M.config()
             })
         },
     })
+    
+    cmp.event:on(
+        'confirm_done',
+        cmp_autopairs.on_confirm_done()
+    )
 
     -- You can also set special config for specific filetypes:
     --    cmp.setup.filetype('gitcommit', {
