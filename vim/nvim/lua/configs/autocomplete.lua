@@ -4,6 +4,9 @@ function M.config()
     -- Setup nvim-cmp.
     local cmp = require 'cmp'
     local lspkind = require('lspkind')
+    vim.g.copilot_no_tab_map = true
+    vim.g.copilot_assume_mapped = true
+    vim.g.copilot_tab_fallback = ""
     cmp.setup({
         snippet = {
             -- REQUIRED - you must specify a snippet engine
@@ -23,7 +26,7 @@ function M.config()
             }),
             -- Accept currently selected item...
             -- Set `select` to `false` to only confirm explicitly selected items:
-            ['<CR>'] = cmp.mapping.confirm({ 
+            ['<cr>'] = cmp.mapping.confirm({ 
                 select = true, 
                 behavior = cmp.ConfirmBehavior.Replace
             }),
@@ -79,7 +82,7 @@ function M.config()
 
         mapping = {
 
-            ["<C-n>"] = cmp.mapping(function(fallback)
+            ["<C-j>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_next_item()
                 elseif luasnip.expand_or_jumpable() then
@@ -91,7 +94,7 @@ function M.config()
                 end
             end, { "i", "s" }),
 
-            ["<C-p>"] = cmp.mapping(function(fallback)
+            ["<C-k>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_prev_item()
                 elseif luasnip.jumpable(-1) then
@@ -100,6 +103,17 @@ function M.config()
                     fallback()
                 end
             end, { "i", "s" }),
+
+            ['<Tab>'] = cmp.mapping(function(fallback)
+                local copilot_keys = vim.fn['copilot#Accept']()
+                if cmp.visible() then
+                    cmp.select_next_item()
+                elseif copilot_keys ~= '' and type(copilot_keys) == 'string' then
+                    vim.api.nvim_feedkeys(copilot_keys, 'i', true)
+                else
+                    fallback()
+                end
+            end, { 'i', 's', }),
 
             -- ... Your other mappings ...
         },
@@ -135,6 +149,15 @@ function M.config()
         end,
     })
 
+    vim.g.copilot_filetypes = {
+        ["*"] = false,
+        ["javascript"] = true,
+        ["typescript"] = true,
+        ["lua"] = false,
+        ["c"] = true,
+        ["c++"] = true,
+        ["python"] = true,
+    }
 end
 
 return M
