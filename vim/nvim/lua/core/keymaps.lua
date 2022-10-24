@@ -14,21 +14,94 @@ local function set_bg_dark()
     vim.cmd('colorscheme ' .. colors_name)
 end
 
+local function number_toggle()
+    if vim.opt.relativenumber then
+       vim.opt.relativenumber = false
+       vim.opt.number = true
+    else
+        vim.opt.relativenumber = true
+    end
+end
+
+
 -- keymaps
+--vim.keymap.set({'i', 'n'}, 'kj', '<esc>')
+vim.keymap.set({'x', 'n'}, ';', ':')
 vim.keymap.set('i', '<C-g>', '<esc>')
 vim.keymap.set('i', '<C-;>', '::') -- for C++ and Rust
 vim.keymap.set('n', '<leader>vl', set_bg_light)
 vim.keymap.set('n', '<leader>vd', set_bg_dark)
 vim.keymap.set('n', '<leader>', ':')
+vim.keymap.set('n', '<leader>n', number_toggle)
+vim.keymap.set('n', 'k', 'gk')
+vim.keymap.set('n', 'gk', 'k')
+vim.keymap.set('n', 'j', 'gj')
+vim.keymap.set('n', 'gj', 'j')
+vim.keymap.set('n', 'H', '^')
+vim.keymap.set('n', 'L', '$')
+vim.keymap.set('i', '<C-a>', '<C-o>0')
+vim.keymap.set('i', '<C-e>', '<C-o>$')
+vim.keymap.set('n', '<Space>', '<C-F>')
+vim.keymap.set('x', 'v', '<C-V>')
+vim.keymap.set('c', '<C-V>', '<C-R>+')
+vim.keymap.set('c', '<C-j>', '<t_kd>')
+vim.keymap.set('c', '<C-k>', '<t_ku>')
+vim.keymap.set('c', '<C-a>', '<Home>')
+vim.keymap.set('c', '<C-e>', '<End>')
+-- Keep search pattern at the center of the screen.
+vim.keymap.set('n', 'n', 'nzz', { silent = true })
+vim.keymap.set('n', 'N', 'Nzz', { silent = true })
+vim.keymap.set('n', '*', '*zz', { silent = true })
+vim.keymap.set('n', '#', '#zz', { silent = true })
+vim.keymap.set('n', 'g*', 'g*zz', { silent = true })
+vim.keymap.set('n', '<leader>/', ':nohls<CR>', { silent = true }) -- remove search highlight
+vim.keymap.set('v', '<leader>y', '"+y')
+vim.keymap.set('n', '<leader>v', 'V`}')
+vim.keymap.set('c', 'w!!', 'w !sudo tee >/dev/null %`}')
+vim.keymap.set('n', '<C-e>', '2<C-e>')
+vim.keymap.set('n', '<C-y>', '2<C-y>')
+vim.keymap.set('n', '<leader>q', ':q<CR>')
+vim.keymap.set('n', '<leader>w', ':w<CR>')
+
+-- 交换 ' `, 使得可以快速使用'跳到marked位置
+vim.keymap.set('n', "'", '`')
+vim.keymap.set('n', '`', "'")
+
+-- switch * and #
+vim.keymap.set('n', '*', '#')
+vim.keymap.set('n', '#', '*')
+
+vim.keymap.set('n', 'U', '<C-r>')
+
+
+-- buffers
+vim.keymap.set('n', '[b', ':bprevious<cr>')
+vim.keymap.set('n', ']b', ':bnext<cr>')
+
+-- tabs
+vim.keymap.set('n', '<leader>1', '1gt')
+vim.keymap.set('n', '<leader>2', '2gt')
+vim.keymap.set('n', '<leader>3', '3gt')
+vim.keymap.set('n', '<leader>4', '4gt')
+vim.keymap.set('n', '<leader>5', '5gt')
+vim.keymap.set('n', '<leader>6', '6gt')
+vim.keymap.set('n', '<leader>7', '7gt')
+vim.keymap.set('n', '<leader>8', '8gt')
+vim.keymap.set('n', '<leader>9', '9gt')
+vim.keymap.set('n', '<leader>0', ':tablast<cr>')
 -- f: file tree
 vim.keymap.set('n', '<F3>', ':NvimTreeToggle<cr>')
 vim.keymap.set('n', '<leader>ft', ':NvimTreeToggle<cr>')
 vim.keymap.set('n', '<leader>ff', ':NvimTreeFocus<cr>')
+-- paste mode
+vim.opt.pastetoggle = '<F5>'
 -- y: telescope
+vim.keymap.set('n', '<F7>', function() require 'telescope.builtin'.current_buffer_fuzzy_find {} end)
+vim.keymap.set('n', '<F8>', function() require 'telescope.builtin'.registers {} end)
 vim.keymap.set('n', '<F9>', function() require 'telescope.builtin'.find_files {} end)
 vim.keymap.set('n', '<F10>', function() require 'telescope.builtin'.git_files {} end)
 vim.keymap.set('n', '<F11>', function() require 'telescope.builtin'.buffers {} end)
-vim.keymap.set({ 'n', 'i' }, '<C-p>', function() require 'telescope.builtin'.registers {} end)
+vim.keymap.set({ 'n', 'i' }, '<C-p>', function() require 'telescope.builtin'.oldfiles {} end)
 -- w: window
 vim.keymap.set('n', '<leader>w1', '<c-w>o')
 vim.keymap.set('n', '<leader>wx', ':x<cr>')
@@ -97,10 +170,14 @@ vim.keymap.set('n', '<leader>tv', ':ToggleTerm direction=vertical<cr>')
 
 -- h: git
 vim.keymap.set('n', '<leader>hu', ':Gitsigns undo_stage_hunk<cr>')
-vim.keymap.set('n', '<leader>hn', ':Gitsigns next_hunk<cr>')
-vim.keymap.set('n', '<leader>hc', ':Gitsigns preview_hunk<cr>')
+vim.keymap.set('n', '<leader>hj', ':Gitsigns next_hunk<cr>')
+vim.keymap.set('n', '<leader>hk', ':Gitsigns preview_hunk<cr>')
 vim.keymap.set('n', '<leader>hr', ':Gitsigns reset_hunk<cr>')
 vim.keymap.set('n', '<leader>hR', ':Gitsigns reset_buffer')
 vim.keymap.set('n', '<leader>hb', ':Gitsigns blame_line<cr>')
 vim.keymap.set('n', '<leader>hd', ':Gitsigns diffthis<cr>')
 vim.keymap.set('n', '<leader>hs', ':<C-U>Gitsigns select_hunk<CR>')
+
+-- indent of selection in virtual and normal mode
+vim.keymap.set({'n', 'v'}, '>', '>gv')
+vim.keymap.set({'n', 'v'}, '<', '<gv')

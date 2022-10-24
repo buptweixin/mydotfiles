@@ -4,17 +4,17 @@
 
 -- sonokai
 --sonokai styles: default, atlantis, andromeda, shusia, maia, espresso
-vim.g.sonokai_style = 'default'
-vim.g.sonokai_enable_italic = 0
-vim.g.sonokai_disable_italic_comment = 0
-vim.cmd('colorscheme sonokai')
+--vim.g.sonokai_style = 'atlantis'
+--vim.g.sonokai_enable_italic = 0
+--vim.g.sonokai_disable_italic_comment = 0
+--vim.cmd('colorscheme sonokai')
 
 -- tokyo night
--- vim.g.tokyodark_transparent_background = false
---vim.g.tokyodark_enable_italic_comment = true
---vim.g.tokyodark_enable_italic = true
---vim.g.tokyodark_color_gamma = "1.0"
---vim.cmd("colorscheme tokyodark")
+ vim.g.tokyodark_transparent_background = false
+vim.g.tokyodark_enable_italic_comment = true
+vim.g.tokyodark_enable_italic = true
+vim.g.tokyodark_color_gamma = "1.0"
+vim.cmd("colorscheme tokyodark")
 
 -- Change the "hint" color to the "orange" color, and make the "error" color bright red
 --vim.g.tokyonight_colors = { hint = "orange", error = "#cb5550" }
@@ -56,4 +56,4 @@ vim.cmd('colorscheme sonokai')
 -- oxocarbon
 -- vim.cmd("colorscheme oxocarbon-lua")
 
-vim.cmd("set background=light")
+vim.cmd("set background=dark")

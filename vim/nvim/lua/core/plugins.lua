@@ -42,7 +42,8 @@ return require('packer').startup(function()
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
 	use 'neovim/nvim-lspconfig'
-	--use 'glepnir/lspsaga.nvim'
+	use 'glepnir/lspsaga.nvim'
+    use 'github/copilot.vim'
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-buffer'
 	use 'hrsh7th/cmp-path'
@@ -82,10 +83,15 @@ return require('packer').startup(function()
 	use "lukas-reineke/indent-blankline.nvim"
 
 	-- startup screen
-	use 'leslie255/aleph-nvim'
+    use {
+        'goolord/alpha-nvim',
+        config = function ()
+            require'alpha'.setup(require'alpha.themes.dashboard'.config)
+        end
+    }
 
 	-- english grammar check
-	use 'rhysd/vim-grammarous'
+	-- use 'rhysd/vim-grammarous'
 
 	-- ascii image
 	use {
