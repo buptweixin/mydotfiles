@@ -9,5 +9,5 @@ then
 fi
 
 gi () {
-        curl -L -s https://www.gitignore.io/api/$@
+        proxychains4 curl -L -s https://www.gitignore.io/api/$@
 }

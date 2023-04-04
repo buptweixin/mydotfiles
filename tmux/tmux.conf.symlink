@@ -6,7 +6,7 @@
 
 
 # -- general -------------------------------------------------------------------
-bind-key \ split-window -h
+bind-key \\ split-window -h -c '#{pane_current_path}'  # Split panes horizontal
 bind-key - split-window -v
 
 # join pane
