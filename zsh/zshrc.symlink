@@ -124,3 +124,20 @@ export EDITOR=vim
 
 # for MNN
 export PKG_CONFIG_PATH=/usr/local/Cellar/zlib/1.2.11/lib/pkgconfig:$PKG_CONFIG_PATH
+POWERLEVEL9K_DISABLE_GITSTATUS=true
+# Nodejs
+VERSION=v18.15.0
+DISTRO=linux-x64
+export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH
+# Nodejs
+VERSION=v18.15.0
+DISTRO=linux-x64
+export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH
+# Nodejs
+VERSION=v18.15.0
+DISTRO=linux-x64
+export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH
+# Nodejs
+VERSION=v18.15.0
+DISTRO=linux-x64
+export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH

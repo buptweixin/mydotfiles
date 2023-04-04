@@ -17,3 +17,5 @@ else
   ~/.fzf/install
 fi
 
+
+sudo usermod -s $(which zsh) $(whoami)
