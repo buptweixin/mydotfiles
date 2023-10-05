@@ -3,3 +3,6 @@
 -- Add any additional keymaps here
 
 vim.keymap.set("i", "kj", "<esc>")
+vim.keymap.set("n", "U", "<C-r>")
+
+-- nnoremap U <C-r>
