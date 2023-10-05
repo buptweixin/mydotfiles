@@ -1,14 +1,4 @@
 #!/bin/bash
-
-echo "install zgen"
-# download zgen
-echo "Install zgen..."
-if [ -d ${HOME}/.zgen ]; then
-  echo "zgen has been installed."
-else
-    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
-fi
-
 if [ -d ~/.fzf ]; then
   echo "Fzf has been installed."
 else
