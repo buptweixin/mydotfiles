@@ -1,3 +1,4 @@
+#!/bin/bash
 mkdir -p $HOME/.config
 if [ -d $HOME/.config/nvim ]; then
 	echo "Backup old nvim config"
