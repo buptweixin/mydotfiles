@@ -11,6 +11,11 @@ then
   echo "  Installing Homebrew for you."
   # Install homebrew for macos and linux
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  if test "$(uname)" = "Linux"
+  then
+    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> $HOME/.profile
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  fi
 fi
 
 if test "$(uname)" = "Darwin"
