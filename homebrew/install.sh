@@ -15,6 +15,7 @@ if test ! $(which brew); then
 			echo
 			echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
 		) >>$HOME/.profile
+		source $HOME/.profile
 		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 	fi
 fi
