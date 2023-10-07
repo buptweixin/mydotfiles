@@ -83,7 +83,7 @@ zinit from'gh-r' lbin'!' nocompile for \
   lbin'!* -> shfmt'  @mvdan/sh           \
   lbin'!**/nvim' @neovim/neovim      \
   lbin'!**/rg'       @BurntSushi/ripgrep \
-  lbin atinit"
+  lbin'!**/exa' atinit"
     alias ll='exa -al';
     alias l='exa -blF'; 
     alias la='exa -abghilmu';
@@ -145,6 +145,4 @@ if [[ -a ~/.localrc ]]
 then
   source ~/.localrc
 fi
-
-export HOMEBREW_NO_AUTO_UPDATE=1
 
