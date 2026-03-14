@@ -138,7 +138,7 @@ There's a few special files in the hierarchy.
 
 - **bin/**: Anything in `bin/` will get added to your `$PATH` and be made
   available everywhere.
-- **Brewfile**: This is a list of applications for [Homebrew Cask](https://caskroom.github.io) to install: things like Chrome and 1Password and Adium and stuff. Might want to edit this file before running any initial setup.
+- **Brewfile**: This is a list of Homebrew packages to install. Edit it before running any initial setup if you don't want the defaults.
 - **topic/\*.zsh**: Any files ending in `.zsh` get loaded into your
   environment.
 - **topic/path.zsh**: Any file named `path.zsh` is loaded first and is
@@ -153,21 +153,39 @@ There's a few special files in the hierarchy.
 
 ## install
 
-Prerequirements:
+Prerequisites:
 
-[neovim](https://github.com/neovim/neovim)
+- `bash`
+- `git`
+- `curl`
+- macOS: Command Line Tools for Xcode via `xcode-select --install`
+- [neovim](https://github.com/neovim/neovim)
 
 Run this:
 
 ```sh
 git clone https://github.com/buptweixin/mydotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-git checkout nobrew
 script/bootstrap
 ```
 
 This will symlink the appropriate files in `.dotfiles` to your home directory.
 Everything is configured and tweaked within `~/.dotfiles`.
+
+By default the bootstrap flow configures Homebrew to use the TUNA mirrors for
+git remotes, API metadata, bottles, and the PyPI index Homebrew uses. Set
+`DOTFILES_DISABLE_TUNA_HOMEBREW=1` before running `script/bootstrap` if you
+want to keep the official Homebrew sources instead.
+
+The default package set installed from `Brewfile` includes tools such as
+`ripgrep`, `fd`, `tmux`, and `zoxide`. The shell initializes `zoxide` with
+`z` as the command, replacing the previous `z.lua` setup while keeping the
+same workflow.
+
+Bootstrap also runs topic installers. In particular, `ghostty/install.sh` will
+check whether Ghostty is already installed, install it with Homebrew if not,
+and link the repo-managed config at
+`ghostty/config.ghostty` to Ghostty's config location on your machine.
 
 The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
 which sets up a few paths that'll be different on your particular machine.

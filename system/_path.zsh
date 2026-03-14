@@ -1,2 +1,14 @@
-export PATH="./bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin:$ZSH/bin:$PATH"
+typeset -U path
+path=(
+  $ZSH/bin
+  $HOME/.local/bin
+  $path
+  /usr/local/bin
+  /usr/local/sbin
+  /usr/bin
+  /bin
+  /usr/sbin
+  /sbin
+)
+export PATH
 export MANPATH="/usr/local/man:/usr/local/git/man:$MANPATH"

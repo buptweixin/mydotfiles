@@ -2,12 +2,37 @@
 #
 # Run all dotfiles installers.
 
-set -e
+set -euo pipefail
 
-cd "$(dirname $0)"/..
+cd "$(dirname "$0")/.."
 
-# find the installers and run them iteratively
-find . -name install.sh | while read installer; do sh -c "${installer}"; done
+run_installer() {
+	local installer=$1
+
+	echo "› ${installer}"
+	bash "$installer"
+}
+
+installers=()
+while IFS= read -r installer; do
+	installers+=("$installer")
+done < <(find . -name install.sh \
+	-not -path './script/install' \
+	-not -path './homebrew/install.sh' \
+	| sort)
+
+echo "› ./homebrew/install.sh"
+# shellcheck source=homebrew/install.sh
+source ./homebrew/install.sh
+
+if ! command -v brew >/dev/null 2>&1; then
+	echo 'brew is not available after Homebrew setup' >&2
+	exit 1
+fi
 
 echo "› brew bundle"
-brew bundle
+brew bundle --file=Brewfile
+
+for installer in "${installers[@]}"; do
+	run_installer "$installer"
+done

@@ -1,4 +1,5 @@
-tap 'homebrew/bundle'
 brew 'ncdu'
-brew 'nodejs'
+brew 'node'
 brew 'npm'
+brew 'tmux'
+brew 'zoxide'
