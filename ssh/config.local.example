@@ -1,0 +1,19 @@
+# Copy host aliases here. The shared defaults from ~/.ssh/config.d/*.conf
+# are loaded automatically by ssh/install.sh.
+
+# Example training cluster aliases:
+#
+# Host gpu-a01
+#   HostName 10.0.0.11
+#   User ubuntu
+#   IdentityFile ~/.ssh/id_ed25519_training
+#
+# Host gpu-a02
+#   HostName 10.0.0.12
+#   User ubuntu
+#   IdentityFile ~/.ssh/id_ed25519_training
+#
+# Host h100-01
+#   HostName h100-01.internal.example.com
+#   User arno
+#   IdentityFile ~/.ssh/id_ed25519_training

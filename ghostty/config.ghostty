@@ -1,7 +1,3 @@
-# Match the existing Powerlevel10k setup and keep Nerd Font glyphs intact.
-# font-family = MesloLGS NF
-
-# --- Typography ---
 font-family = "Maple Mono NF CN"
 font-size = 15
 adjust-cell-height = 2
@@ -28,32 +24,19 @@ mouse-hide-while-typing = true
 copy-on-select = clipboard
 
 # --- Performance ---
-scrollback-limit = 25000000
+scrollback-limit = 500000
 
 # Keep shell metadata accurate across tabs, splits, tmux, and editor sessions.
 shell-integration = zsh
 notify-on-command-finish = always
 
-# prefix
-keybind = ctrl+a>=new_split:right
-keybind = ctrl+a>-=new_split:down
-
-# pane navigation
-keybind = ctrl+a>h=goto_split:left
-keybind = ctrl+a>j=goto_split:bottom
-keybind = ctrl+a>k=goto_split:top
-keybind = ctrl+a>l=goto_split:right
-
-# close pane
-keybind = ctrl+a>x=close_surface
-
-# zoom pane
-keybind = ctrl+a>z=toggle_split_zoom
-
 # tabs
-keybind = ctrl+a>c=new_tab
-keybind = ctrl+a>n=next_tab
-keybind = ctrl+a>p=previous_tab
+keybind = ctrl+q>c=new_tab
+keybind = ctrl+q>n=next_tab
+keybind = ctrl+q>p=previous_tab
 
 # reload config
-keybind = ctrl+a>r=reload_config
+keybind = ctrl+q>r=reload_config
+
+# tmux
+initial-command = /bin/zsh -lc 'exec ~/.dotfiles/bin/tmx'

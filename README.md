@@ -11,6 +11,14 @@
 7. zoom pane: `prefix + z`
 8. kill pane/window: `prefix + x/X`, kill other window: `prefix + C-x`, kill session `prefix + Q`
 9. copy mode: `prefix + [` enter copy mode, `v` start selection, `y` copy selection, `prefix-p` paste selection, `prefix-b` list-buffers, `prefix-P` choose-buffer
+10. refresh tmux environment from the active client: `prefix + E`
+
+## ssh + tmux workflow
+
+- `tmx` attaches or creates the local tmux session. `tmx here` derives a session name from the current project directory.
+- `ssht <host>` opens an SSH connection and attaches or creates a remote tmux session named after the host alias.
+- `tssh <host>` does the same from inside tmux, but opens the remote session in a new local tmux window named after the host.
+- `ssh/install.sh` manages a shared SSH include file under `~/.ssh/config.d/50-dotfiles.conf` and bootstraps `~/.ssh/config.local` with host alias examples.
 
 ## binaries
 
@@ -186,6 +194,10 @@ Bootstrap also runs topic installers. In particular, `ghostty/install.sh` will
 check whether Ghostty is already installed, install it with Homebrew if not,
 and link the repo-managed config at
 `ghostty/config.ghostty` to Ghostty's config location on your machine.
+
+The bootstrap installers also set up a layered SSH config. Shared defaults live
+in `~/.ssh/config.d/50-dotfiles.conf`, while your machine-specific host aliases
+belong in `~/.ssh/config.local`.
 
 The main file you'll want to change right off the bat is `zsh/zshrc.symlink`,
 which sets up a few paths that'll be different on your particular machine.

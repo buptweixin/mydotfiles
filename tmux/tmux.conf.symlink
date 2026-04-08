@@ -2,8 +2,13 @@
 # ===  General settings  ===
 # ==========================
 
-set -g default-terminal "screen-256color"
-set -g history-limit 20000
+set -g default-terminal "tmux-256color"
+set -g default-shell "/bin/zsh"
+# macOS's /etc/zprofile still uses an unquoted `eval \`path_helper -s\`` path,
+# which breaks interactive login shells when PATH contains entries with spaces.
+# Start panes as interactive non-login shells and inherit the tmux server env.
+set -g default-command "exec /bin/zsh -i"
+set -g history-limit 100000
 set -g buffer-limit 20
 set -sg escape-time 0
 set -g display-time 1500
@@ -61,9 +66,6 @@ bind C-r source-file ~/.tmux.conf \; display "Config reloaded"
 
 # new window and retain cwd
 bind c new-window -c "#{pane_current_path}"
-
-# Prompt to rename window right after it's created
-set-hook -g after-new-window 'command-prompt -I "#{window_name}" "rename-window '%%'"'
 
 # Rename session and window
 bind , command-prompt -I "#{window_name}" "rename-window '%%'"
@@ -199,7 +201,6 @@ bind -T copy-mode-vi Y send-keys -X copy-line \;\
     run "tmux save-buffer - | $yank"
 bind-key -T copy-mode-vi D send-keys -X copy-end-of-line \;\
     run "tmux save-buffer - | $yank"
-bind -T copy-mode-vi C-j send-keys -X copy-pipe-and-cancel "$yank"
 bind-key -T copy-mode-vi A send-keys -X append-selection-and-cancel \;\
     run "tmux save-buffer - | $yank"
 
@@ -330,8 +331,16 @@ set -g @prefix_highlight_copy_mode_attr "fg=$color_dark,bg=$color_secondary"
 # =====================================
 # ===        Renew environment      ===
 # =====================================
+set -as terminal-features ",tmux-256color:RGB"
+set -as terminal-features ",screen-256color:RGB"
+set -as terminal-features ",xterm-256color:RGB"
+set -as terminal-features ",xterm-ghostty:RGB"
+
+set -s set-clipboard external
+
 set -g update-environment \
   "DISPLAY\
+  COLORTERM\
   SSH_ASKPASS\
   SSH_AUTH_SOCK\
   SSH_AGENT_PID\
@@ -340,7 +349,7 @@ set -g update-environment \
   WINDOWID\
   XAUTHORITY"
 
-bind '$' run "~/.tmux/renew_env.sh"
+bind E run "~/.tmux/renew_env.sh"
 
 set -g allow-passthrough on
 
