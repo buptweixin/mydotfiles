@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF' >&2
+usage: ssht <host-alias> [remote-session]
+EOF
+}
+
+sanitize_name() {
+  printf '%s' "${1:-}" \
+    | tr '[:upper:]' '[:lower:]' \
+    | sed -E 's#[^a-z0-9._-]+#-#g; s#^-+##; s#-+$##; s#-+#-#g'
+}
+
+if [[ $# -lt 1 ]]; then
+  usage
+  exit 1
+fi
+
+host_alias="$1"
+remote_session="${2:-ssh-$(sanitize_name "$host_alias")}"
+remote_session="$(sanitize_name "$remote_session")"
+remote_session="${remote_session:-ssh-remote}"
+
+if [[ -n "${TMUX-}" ]]; then
+  tmux rename-window "$host_alias" 2>/dev/null || true
+fi
+
+remote_command="export TERM=xterm-256color COLORTERM=truecolor; exec tmux new-session -A -s $remote_session"
+
+exec ssh -t "$host_alias" "$remote_command"

@@ -159,6 +159,15 @@ zinit light-mode for \
         compile'.*fast*~*.zwc' nocompletions \
     $ZI_REPO/fast-syntax-highlighting
 
+# Initialize completions after zinit has registered completion sources.
+autoload -Uz compinit
+if (( ${+functions[zicompinit]} )); then
+  zicompinit
+  zicdreplay
+else
+  compinit
+fi
+
 if (( $+commands[zoxide] )); then
   eval "$(zoxide init zsh --cmd z)"
 fi
@@ -180,5 +189,12 @@ then
 fi
 
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-precmd () { echo -n "\x1b]1337;CurrentDir=$(pwd)\x07" }
+if [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -e "${HOME}/.iterm2_shell_integration.zsh" ]]; then
+  source "${HOME}/.iterm2_shell_integration.zsh"
+
+  _dotfiles_iterm2_precmd() {
+    print -rn -- "\x1b]1337;CurrentDir=$(pwd)\x07"
+  }
+
+  precmd_functions+=(_dotfiles_iterm2_precmd)
+fi

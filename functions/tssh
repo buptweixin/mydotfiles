@@ -1,0 +1,19 @@
+tssh() {
+  emulate -L zsh
+  setopt local_options no_aliases pipefail
+
+  if (( $# < 1 )); then
+    print -u2 'usage: tssh <host-alias> [remote-session]'
+    return 1
+  fi
+
+  local host=$1
+  local -a cmd=(ssht "$@")
+
+  if [[ -n ${TMUX-} ]]; then
+    tmux new-window -n "$host" "${(j: :)${(q)cmd}}"
+    return
+  fi
+
+  "${cmd[@]}"
+}
