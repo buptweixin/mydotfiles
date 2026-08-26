@@ -28,6 +28,11 @@ copy-on-select = clipboard
 # token. Kept as word chars: - . / @ _ ? (paths, emails, URLs stay whole).
 selection-word-chars = " \t'\"│`|:;,()[]{}<>=#$&*~"
 
+# --- Keyboard (macOS) ---
+# Send the Esc prefix for Option so option+left/right jumps by word
+# (pairs with the ^[^[D bindkeys in zsh/config.zsh).
+macos-option-as-alt = true
+
 # --- Performance ---
 scrollback-limit = 500000
 
@@ -39,6 +44,12 @@ notify-on-command-finish = always
 keybind = ctrl+q>c=new_tab
 keybind = ctrl+q>n=next_tab
 keybind = ctrl+q>p=previous_tab
+
+# quick terminal (quake-style dropdown, autohides on focus loss;
+# only triggerable while a Ghostty surface has focus)
+keybind = super+grave_accent=toggle_quick_terminal
+quick-terminal-position = top
+quick-terminal-animation-duration = 0.15
 
 # reload config
 keybind = ctrl+q>r=reload_config
