@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
-# Run all dotfiles installers.
+# Run all dotfiles installers, or just the given topics:
+#   script/install             # everything
+#   script/install ssh tmux    # only these topics' installers
 
 set -euo pipefail
 
@@ -13,12 +15,26 @@ run_installer() {
 	bash "$installer"
 }
 
+if (( $# > 0 )); then
+	for topic in "$@"; do
+		installer="./${topic}/install.sh"
+		if [[ -f "$installer" ]]; then
+			run_installer "$installer"
+		else
+			echo "no installer for topic '${topic}'" >&2
+			exit 1
+		fi
+	done
+	exit 0
+fi
+
 installers=()
 while IFS= read -r installer; do
 	installers+=("$installer")
-done < <(find . -name install.sh \
+done < <(find . -maxdepth 2 -name install.sh \
 	-not -path './script/install' \
 	-not -path './homebrew/install.sh' \
+	-not -path './.git/*' \
 	| sort)
 
 echo "› ./homebrew/install.sh"

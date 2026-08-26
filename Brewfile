@@ -1,5 +1,8 @@
+brew 'bat'
+brew 'gh'
 brew 'ncdu'
 brew 'node'
 brew 'npm'
 brew 'tmux'
 brew 'zoxide'
+brew 'zsh'

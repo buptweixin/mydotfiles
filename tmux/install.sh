@@ -38,7 +38,7 @@ cp -a ./tmux/. "$HOME"/.tmux/
 # create dump __noop session in detached mode, and kill it when plugins are installed
 printf "Install TPM plugins\n"
 tmux new -d -s __noop >/dev/null 2>&1 || true
-tmux set-environment -g TMUX_PLUGIN_MANAGER_PATH "~/.tmux/plugins"
+tmux set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.tmux/plugins"
 "$HOME"/.tmux/plugins/tpm/bin/install_plugins || true
 tmux kill-session -t __noop >/dev/null 2>&1 || true
 

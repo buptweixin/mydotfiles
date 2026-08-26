@@ -1,0 +1,32 @@
+name: lint
+
+on:
+  push:
+    paths:
+      - "**.sh"
+      - "script/**"
+      - "bin/**"
+      - ".github/workflows/lint.yml"
+  pull_request:
+    paths:
+      - "**.sh"
+      - "script/**"
+      - "bin/**"
+      - ".github/workflows/lint.yml"
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Run shellcheck
+        run: |
+          # Check shell scripts only (bin/ also holds a few ruby scripts);
+          # bash/zsh/sh shebangs all end in "sh".
+          find . -path ./.git -prune -o -type f \( -name "*.sh" -o -path "./script/*" -o -path "./bin/*" \) -print |
+            while IFS= read -r f; do
+              head -n1 "$f" | grep -q 'sh$' && printf '%s\n' "$f"
+            done |
+            xargs shellcheck
