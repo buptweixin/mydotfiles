@@ -47,7 +47,6 @@ printf_escape() {
 }
 
 len=$( input | wc -c )
-echo "Yanking text of length $len ... " >> /tmp/yank.log
 if [[ -n $SSH_CLIENT || -n $SSH_TTY || -n $SSH_CONNECTION ]]; then
   max=74994
   test $len -gt $max && echo "$0: input is $(( len - max )) bytes too long" >&2

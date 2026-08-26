@@ -1,13 +1,11 @@
 # Local/private config goes in the include
 [include]
         path = ~/.gitconfig.local
-[hub]
-        protocol = https
 [alias]
         co = checkout
-        promote = !$ZSH/bin/git-promote
-        wtf     = !$ZSH/bin/git-wtf
-        rank-contributors = !$ZSH/bin/git-rank-contributors
+        promote = !$HOME/.dotfiles/bin/git-promote
+        wtf     = !$HOME/.dotfiles/bin/git-wtf
+        rank-contributors = !$HOME/.dotfiles/bin/git-rank-contributors
         count   = !git shortlog -sn
 [color]
         diff = auto
@@ -16,7 +14,12 @@
         ui = true
 [core]
         excludesfile = ~/.gitignore
-        editor = vim
+        editor = nvim
+        pager = delta
+[interactive]
+        diffFilter = delta --color-only
+[delta]
+        navigate = true
 [apply]
         whitespace = nowarn
 [mergetool]
@@ -31,9 +34,6 @@
         #
         # Setting to git 2.0 default to suppress warning message
         default = simple
-[user]
-	name = Arno.Wei
-	email = weixin.bupt.ml@gmail.com
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
@@ -42,8 +42,8 @@
 [pull]
 	rebase = true
 [credential "https://github.com"]
-	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
+        helper =
+        helper = !gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
+        helper =
+        helper = !gh auth git-credential
