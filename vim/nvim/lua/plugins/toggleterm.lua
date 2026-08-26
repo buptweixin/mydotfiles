@@ -2,6 +2,9 @@ return {
   {
     "akinsho/toggleterm.nvim",
     cmd = { "ToggleTerm", "TermExec" },
+    keys = {
+      { "<leader>ht", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
+    },
     opts = {
       highlights = {
         Normal = { link = "Normal" },
@@ -22,9 +25,6 @@ return {
       shading_factor = 2,
       direction = "float",
       float_opts = { border = "rounded" },
-      keys = {
-        { "<leader>ht", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
-      },
     },
   },
 }

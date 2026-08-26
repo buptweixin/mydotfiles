@@ -11,18 +11,15 @@ GHOSTTY_CONFIG_SOURCE="$SCRIPT_DIR/config.ghostty"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	GHOSTTY_CONFIG_DIR="$HOME/Library/Application Support/com.mitchellh.ghostty"
-	GHOSTTY_CONFIG_TARGET="$GHOSTTY_CONFIG_DIR/config.ghostty"
 else
 	GHOSTTY_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ghostty"
-	GHOSTTY_CONFIG_TARGET="$GHOSTTY_CONFIG_DIR/config"
 fi
+# Ghostty's canonical config filename is `config` (no extension); the
+# `config.ghostty` alias only exists on newer versions.
+GHOSTTY_CONFIG_TARGET="$GHOSTTY_CONFIG_DIR/config"
 
 ghostty_installed() {
-	if command -v ghostty >/dev/null 2>&1; then
-		return 0
-	fi
-
-	brew list --cask ghostty >/dev/null 2>&1
+	command -v ghostty >/dev/null 2>&1
 }
 
 ensure_ghostty_installed() {
@@ -31,8 +28,15 @@ ensure_ghostty_installed() {
 		return
 	fi
 
-	echo "Install Ghostty..."
-	brew install --cask ghostty
+	if [[ "$(uname -s)" == "Darwin" ]]; then
+		echo "Install Ghostty..."
+		brew install --cask ghostty
+	else
+		# brew casks are macOS-only; on Linux install via your system
+		# package manager (e.g. apt/zypper) before re-running this script.
+		echo "Ghostty not found. Install it with your system package manager," >&2
+		echo "then re-run this script to link the config." >&2
+	fi
 }
 
 link_ghostty_config() {

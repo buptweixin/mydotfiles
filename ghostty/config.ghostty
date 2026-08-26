@@ -1,5 +1,6 @@
 font-family = "Maple Mono NF CN"
 font-size = 15
+font-thicken = true
 adjust-cell-height = 2
 
 # --- Theme and Colors ---

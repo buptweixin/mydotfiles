@@ -38,4 +38,6 @@ fi
 session_name="$(resolve_session_name "${1:-}")"
 session_name="${session_name:-main}"
 
-exec tmux new-session -A -s "$session_name"
+# -A attaches to the session if it exists; -D detaches any other client
+# first so a second terminal window takes over instead of mirroring it.
+exec tmux new-session -A -D -s "$session_name"
