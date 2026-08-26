@@ -1,5 +1,6 @@
 brew 'bat'
 brew 'gh'
+brew 'herdr'
 brew 'ncdu'
 brew 'node'
 brew 'npm'

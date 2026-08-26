@@ -94,6 +94,28 @@ Git identity is intentionally **not** in `git/gitconfig.symlink`; it lives in
   `~/.ssh/config.d/50-dotfiles.conf` and bootstraps `~/.ssh/config.local`
   with host alias examples.
 
+## herdr (agent workspace runtime)
+
+[herdr](https://github.com/herdrdev/herdr) is a persistent terminal runtime
+for coding agents (claude code, codex, ...) — sessions live in a background
+server and survive terminal close, lid close, and reboot. It complements
+tmux rather than replacing it: tmux stays the default (ghostty runs `tmx`),
+herdr owns the agent workspaces.
+
+- `hr` runs herdr in the current directory — best in a dedicated ghostty
+  tab (`cmd+t`, then `hr`).
+- The prefix is `C-a`, same as tmux. Pane focus is vi-style
+  (`prefix+hjkl`), zoom is `prefix+z`, close pane is `prefix+x`, and
+  `prefix+d` detaches (rebound from herdr's default `prefix+q`).
+- Running herdr *inside* a tmux pane would let the outer tmux swallow
+  `C-a` — prefer standalone ghostty tabs, or rebind one of the two.
+- Config is versioned at `herdr/config.toml` and linked to
+  `~/.config/herdr/config.toml`; apply changes with
+  `herdr server reload-config`. Its zsh completion is generated into
+  `~/.cache/dotfiles/completions` at install time.
+- `manage_ssh_config` stays on: herdr generates its own ssh config that
+  includes `~/.ssh/config` first — it never edits our layered ssh setup.
+
 ## thanks
 
 Forked years ago from [holman/dotfiles](https://github.com/holman/dotfiles)

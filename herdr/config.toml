@@ -1,0 +1,39 @@
+# herdr configuration — linked to ~/.config/herdr/config.toml by
+# herdr/install.sh. Baseline: `herdr --default-config`; only deliberate
+# deviations from the defaults are set below.
+# Reload after edits: herdr server reload-config
+
+onboarding = false
+
+[theme]
+name = "tokyo-night"
+auto_switch = false
+
+[keys]
+# Align with the tmux prefix (herdr runs standalone in ghostty tabs here,
+# not nested inside tmux, so C-a is free). Pane focus already defaults to
+# prefix+h/j/k/l (vi-style) and zoom/close to prefix+z / prefix+x.
+prefix = "ctrl+a"
+# tmux muscle memory: prefix+d detaches (default was prefix+q).
+detach = "prefix+d"
+
+[terminal]
+default_shell = "/bin/zsh"
+# Same lesson as tmux.conf: macOS /etc/zprofile runs path_helper, which
+# mangles PATHs containing spaces in login shells. Start panes as
+# interactive non-login shells instead.
+shell_mode = "non_login"
+
+[remote]
+# herdr --remote generates its OWN ssh config and includes ~/.ssh/config
+# first; it never writes to our layered ~/.ssh/config(.d) setup.
+manage_ssh_config = true
+
+[ui]
+show_agent_labels_on_pane_borders = true
+
+[ui.sound]
+enabled = false
+
+[ui.toast]
+delivery = "system"
