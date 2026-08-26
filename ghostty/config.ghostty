@@ -23,6 +23,10 @@ cursor-opacity = 0.8
 # --- Mouse ---
 mouse-hide-while-typing = true
 copy-on-select = clipboard
+# Word boundaries for double-click selection: the 1.3 defaults plus = # & * ~,
+# so double-clicking "FOO=bar" or "#comment" no longer swallows the whole
+# token. Kept as word chars: - . / @ _ ? (paths, emails, URLs stay whole).
+selection-word-chars = " \t'\"│`|:;,()[]{}<>=#$&*~"
 
 # --- Performance ---
 scrollback-limit = 500000
