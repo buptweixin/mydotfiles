@@ -1,12 +1,5 @@
-# Register Homebrew's zsh git completion before compinit runs.
-completion_dir="$(brew --prefix)/share/zsh/site-functions"
-
-if test -d $completion_dir
-then
-  typeset -U fpath
-  fpath=($completion_dir $fpath)
-fi
-
+# Fetch gitignore templates: `gi macos node` prints a merged template.
+# gitignore.io shut down; the Toptal API is its maintained successor.
 gi () {
-        curl -L -s https://www.gitignore.io/api/$@
+        curl -L -s "https://www.toptal.com/developers/gitignore/api/${(j:,:)@}"
 }

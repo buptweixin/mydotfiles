@@ -2,6 +2,23 @@
 function error() { print -P "%F{red}[ERROR]%f: %F{yellow}$1%f" && return 1 }
 function info() { print -P "%F{blue}[INFO]%f: %F{cyan}$1%f"; }
 
+# Cache `<tool> init zsh` output so we don't fork the tool (and generate
+# the same script) on every shell startup. Regenerates when the binary is
+# newer than the cache, i.e. after an upgrade.
+function cached_init() {
+  local tool=$1; shift
+  local bin cache_dir cache
+  command -v $tool >/dev/null || return 0
+  bin=$(command -v $tool)
+  cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles
+  cache=$cache_dir/$tool-init.zsh
+  if [[ ! -s $cache || $bin -nt $cache ]]; then
+    mkdir -p $cache_dir
+    $tool init zsh "$@" >| $cache 2>/dev/null && zcompile -Uz $cache 2>/dev/null
+  fi
+  [[ -s $cache ]] && source $cache
+}
+
 export ZSH=$HOME/.dotfiles
 # all of our zsh files
 typeset -U config_files
@@ -37,7 +54,7 @@ if [[ ! -e $ZINIT[BIN_DIR] ]]; then
   && info 'setting up zinit' \
   && command chmod g-rwX $ZINIT[HOME_DIR] \
   && zcompile $ZINIT[BIN_DIR]/zinit.zsh \
-  && info 'sucessfully installed zinit'
+    && info 'successfully installed zinit'
 fi
 if [[ -e $ZINIT[BIN_DIR]/zinit.zsh ]]; then
   source $ZINIT[BIN_DIR]/zinit.zsh \
@@ -56,21 +73,23 @@ if [[ $(uname) == "Darwin" ]]; then
     zinit lucid for \
         as"command" \
         from"gh-r" \
-        atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'eval "$(starship init zsh)"' \
+        atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'cached_init starship' \
         starship/starship
 elif [[ $(uname) == "Linux" ]]; then
     zinit lucid for \
         as"command" \
         from"gh-r" \
         bpick"*linux-musl*" \
-        atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'eval "$(starship init zsh)"' \
+        atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'cached_init starship' \
         starship/starship
 fi
 
 
 #=== OH-MY-ZSH & PREZTO PLUGINS =======================
+# OMZL::completion is deliberately NOT loaded: it runs bashcompinit, which
+# triggers a second compinit. Its zstyles live in zsh/completion.zsh.
 zinit for is-snippet \
-  OMZL::{'clipboard','compfix','completion','git','grep','key-bindings'}.zsh \
+  OMZL::{'clipboard','git','grep','key-bindings'}.zsh \
   OMZP::brew \
   PZT::modules/{'history','rsync'}
 
@@ -93,7 +112,6 @@ export LC_ALL="en_US.UTF-8"
 export LC_COLLATE='C'
 export LESS='-RMs'
 export PAGER=less
-export VISUAL=vi
 RPS1='${MODE_INDICATOR_PROMPT} ${vcs_info_msg_0_}'
 #=== ANNEXES ==========================================
 zinit light-mode for "$ZI_REPO"/zinit-annex-{'bin-gem-node','binary-symlink','patch-dl','submods'}
@@ -168,9 +186,7 @@ else
   compinit
 fi
 
-if (( $+commands[zoxide] )); then
-  eval "$(zoxide init zsh --cmd z)"
-fi
+cached_init zoxide --cmd z
 
 # load every completion after autocomplete loads
 for file in ${(M)config_files:#*/completion.zsh}

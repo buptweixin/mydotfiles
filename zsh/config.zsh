@@ -1,9 +1,16 @@
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export CLICOLOR=true
 
+typeset -U fpath
 fpath=($ZSH/functions $fpath)
 
-autoload -U $ZSH/functions/*(:t)
+# autoload user functions; `_`-prefixed files are completion scripts and get
+# picked up from fpath by compinit instead of being autoloaded here.
+for _fn in $ZSH/functions/*(N:t); do
+  [[ "$_fn" == _* ]] && continue
+  autoload -Uz "$_fn"
+done
+unset _fn
 
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
