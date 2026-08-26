@@ -5,6 +5,10 @@ My personal configuration, organized topic-centric in the
 a topic, `*.symlink` files get linked into `$HOME`, and `*.zsh` files get
 sourced by zsh.
 
+**Detailed guides live in [docs/](docs/index.md)** — per-tool manuals
+(ghostty / tmux / herdr / zsh), the workflow playbooks that tie them
+together, and a maintenance & troubleshooting handbook.
+
 ## install
 
 Prerequisites:
