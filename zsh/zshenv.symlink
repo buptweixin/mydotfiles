@@ -1,0 +1,19 @@
+#=== SYSTEM PATH FLOOR ===================================
+# Runs first on every zsh startup path (before /etc/zprofile and
+# /etc/zshrc), including herdr's non-login panes, which skip path_helper
+# entirely and would otherwise have no system dirs guaranteed.
+typeset -U path
+
+# Space-contaminated PATH entries poison /etc/zprofile: path_helper emits
+# an unquoted eval, so "/Library/Application Support/..." splits mid-word
+# and PATH ends up truncated to "/Library/Application" — every external
+# command then fails with "command not found" (uname, mkdir, sleep...).
+# Strip such entries before path_helper ever sees them. Also covers the
+# stray Yunmai lines currently sitting in /etc/paths.
+path=(${path:#*[[:space:]]*})
+
+# Canonical floor: /etc/zshrc calls the bare command `$(locale LC_CTYPE)`,
+# which dies with "command not found: locale" when /usr/bin is missing,
+# and plenty of tooling assumes the core dirs exist in any environment.
+# typeset -U keeps the first occurrence, so existing entries win.
+path=(/usr/local/bin /System/Cryptexes/App/usr/bin /usr/bin /bin /usr/sbin /sbin $path)

@@ -19,7 +19,10 @@ function cached_init() {
   [[ -s $cache ]] && source $cache
 }
 
-export ZSH=$HOME/.dotfiles
+# Resolve this script's real location through the ~/.zshrc symlink so the
+# layered topics below load from THIS checkout, not whatever clone happens
+# to sit at $HOME/.dotfiles (the old hardcoded path).
+export ZSH="${${(%):-%x}:A:h}"
 # all of our zsh files
 typeset -U config_files
 config_files=($ZSH/**/*.zsh)
@@ -64,8 +67,12 @@ if [[ -e $ZINIT[BIN_DIR]/zinit.zsh ]]; then
 else error "unable to find 'zinit.zsh'" && return 1
 fi
 #=== STATIC ZSH BINARY =======================================
+# Single-quote hook payloads so nothing expands while .zshrc is read.
+# The previous double-quoted form captured $PATH verbatim into an
+# unquoted `eval 'export PATH=...$PATH'`, and any PATH entry containing
+# a space split the command and truncated PATH mid-startup.
 zi for atpull"%atclone" depth"1" lucid nocompile nocompletions as"null" \
-    atclone"./install -e no -d ~/.local" atinit"export PATH=$HOME/.local/bin:$PATH" \
+    atclone"./install -e no -d ~/.local" atinit'path=("$HOME/.local/bin" $path)' \
   @romkatv/zsh-bin
 
 #=== PROMPT ===========================================
@@ -214,3 +221,7 @@ if [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -e "${HOME}/.iterm2_shell_integratio
 
   precmd_functions+=(_dotfiles_iterm2_precmd)
 fi
+
+export GUILE_LOAD_PATH="/opt/homebrew/share/guile/site/3.0"
+export GUILE_LOAD_COMPILED_PATH="/opt/homebrew/lib/guile/3.0/site-ccache"
+export GUILE_SYSTEM_EXTENSIONS_PATH="/opt/homebrew/lib/guile/3.0/extensions"
