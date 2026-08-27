@@ -13,7 +13,7 @@ done
 unset _fn
 
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
+HISTSIZE=20000
 SAVEHIST=10000
 
 setopt BANG_HIST # Treat the '!' character specially during expansion.
@@ -37,8 +37,7 @@ setopt CORRECT
 setopt COMPLETE_IN_WORD
 setopt IGNORE_EOF
 
-setopt APPEND_HISTORY # adds history
-setopt INC_APPEND_HISTORY SHARE_HISTORY  # adds history incrementally and share it across sessions
+unsetopt INC_APPEND_HISTORY INC_APPEND_HISTORY_TIME APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
 setopt HIST_REDUCE_BLANKS
 

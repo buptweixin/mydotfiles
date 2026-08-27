@@ -1,3 +1,9 @@
+if (( ${+_DOTFILES_ZSHRC_LOADED} )); then
+  print -r -- '[zsh] already loaded; use reload!'
+  return 0
+fi
+typeset -g _DOTFILES_ZSHRC_LOADED=1
+
 #=== HELPER METHODS ===================================
 function error() { print -P "%F{red}[ERROR]%f: %F{yellow}$1%f" && return 1 }
 function info() { print -P "%F{blue}[INFO]%f: %F{cyan}$1%f"; }
@@ -98,7 +104,7 @@ fi
 zinit for is-snippet \
   OMZL::{'clipboard','git','grep','key-bindings'}.zsh \
   OMZP::brew \
-  PZT::modules/{'history','rsync'}
+  PZT::modules/{'rsync'}
 
 #=== COMPLETIONS ======================================
 local GH_RAW_URL='https://raw.githubusercontent.com'
