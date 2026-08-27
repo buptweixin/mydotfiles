@@ -16,6 +16,11 @@ auto_switch = false
 prefix = "ctrl+a"
 # tmux muscle memory: prefix+d detaches (default was prefix+q).
 detach = "prefix+d"
+# Splits mirror tmux.conf ("\" side by side, "-" stacked). herdr names the
+# actions after the Vim :vs / :sp tradition, so split_vertical is the
+# left|right split (tmux split-window -h) despite the flag mismatch.
+split_vertical = "prefix+\\"
+split_horizontal = "prefix+minus"
 
 [terminal]
 default_shell = "/bin/zsh"
