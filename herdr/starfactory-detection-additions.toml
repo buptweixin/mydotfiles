@@ -1,0 +1,38 @@
+# ==== starfactory (内部 Claude Code fork, 中文界面) 检测补充规则 ====
+# 仅包含"追加"部分。部署时 herdr/install.sh 会把它拼接到上游最新的
+# claude 清单(~/.local/state/herdr/agent-detection/remote/claude.toml)
+# 之后,生成 ~/.config/herdr/agent-detection/claude.toml 本地覆盖。
+# 本地覆盖永远优先于 remote/bundled(shadowing);改动后热加载:
+#   herdr server reload-agent-manifests
+# 离线回归(保存现场屏幕文本后):
+#   herdr agent explain --file <screen.txt> --agent claude --json
+
+[[rules]]
+id = "starfactory_localized_confirm_blocker"
+state = "blocked"
+priority = 990
+region = "whole_recent"
+visible_blocker = true
+any = [
+  { contains = ["Esc 取消"] },
+  { contains = ["esc 取消"] },
+]
+all = [
+  { any = [
+    { contains = ["回车确认"] },
+    { contains = ["enter 确认"] },
+    { contains = ["↑/↓ 选择"] },
+    { contains = ["数字键选择"] },
+  ] },
+]
+
+[[rules]]
+id = "starfactory_workspace_trust_blocker"
+state = "blocked"
+priority = 995
+region = "whole_recent"
+visible_blocker = true
+any = [
+  { contains = ["信任此文件夹"] },
+  { contains = ["是否信任此目录"] },
+]
