@@ -2,7 +2,9 @@
 
 加载机制：`zsh/zshrc.symlink` 按约定收集所有 topic 的 `*.zsh`——
 `path.zsh` 最先（PATH/环境）、其余居中、`completion.zsh` 最后（compinit 之后）。
-zinit 负责工具二进制（rg/fd/fzf/starship/nvim/…）和插件。
+CLI 工具由 Brewfile/Homebrew 安装；zsh 插件由显式 `zsh/install.sh` 从
+`zsh/plugins.lock` 安装，并固定到完整 commit。zsh 启动只加载本地依赖，
+不会联网或安装。
 
 ## 别名精选
 

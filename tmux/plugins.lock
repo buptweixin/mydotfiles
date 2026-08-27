@@ -1,0 +1,8 @@
+tpm tmux-plugins/tpm 99469c4a9b1ccf77fade25842dc7bafbc8ce9946
+tmux-battery tmux-plugins/tmux-battery 5c52d4f7f80384de0781c2277a8989ba98fae507
+tmux-prefix-highlight tmux-plugins/tmux-prefix-highlight 15acc6172300bc2eb13c81718dc53da6ae69de4f
+tmux-online-status tmux-plugins/tmux-online-status 82f4fbcaee7ece775f37cf7ed201f9d4beab76b8
+tmux-sidebar tmux-plugins/tmux-sidebar a41d72c019093fd6a1216b044e111dd300684f1a
+tmux-copycat tmux-plugins/tmux-copycat d7f7e6c1de0bc0d6915f4beea5be6a8a42045c09
+tmux-open tmux-plugins/tmux-open 763d0a852e6703ce0f5090a508330012a7e6788e
+tmux-plugin-sysstat samoshkin/tmux-plugin-sysstat 29e150f403151f2341f3abcb2b2487a5f011dd23

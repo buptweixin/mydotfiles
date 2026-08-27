@@ -31,10 +31,11 @@ optionally generates `git/gitconfig.local.symlink` from its `.example`
 1. sets up Homebrew (installing it from the TUNA mirror if missing — set
    `DOTFILES_DISABLE_TUNA_HOMEBREW=1` to keep official sources), and
 2. runs `brew bundle` with the `Brewfile` (`bat`, `gh`, `ncdu`, `node`, `npm`,
-   `tmux`, `zoxide`, `zsh`), then
-3. runs each topic's `install.sh` (ghostty, ssh, tmux, vim, ...).
+    `tmux`, `zoxide`, `zsh`), then
+3. runs each topic's `install.sh` (ghostty, ssh, tmux, zsh, ...); the zsh
+   installer installs plugins from `zsh/plugins.lock` at their pinned commits.
 
-To re-run a single topic's installer: `script/install ssh tmux`.
+To re-run a single topic's installer: `script/install zsh` (or `script/install ssh tmux`).
 
 Stash environment variables and machine-specific setup in `~/.localrc`; it is
 sourced at the end of `zshrc` and stays out of this repo.
@@ -46,15 +47,14 @@ and curl must be pre-installed (`apt install zsh git curl` or equivalent).
 
 ## where the tools come from
 
-Two installation channels, on purpose:
+- **Brewfile/Homebrew** installs the CLI tools and other packages listed in
+  the Brewfile. Homebrew is a rolling-release package manager, so the Brewfile
+  is a package list, not a strict version lockfile.
+- **`zsh/install.sh`** installs zsh plugins from `zsh/plugins.lock`, pinned to
+  their complete commit SHAs.
 
-- **Brewfile**: base packages (`tmux`, `zoxide`, `gh`, `bat`, `node`, ...).
-- **zinit** (in `zsh/zshrc.symlink`): CLI binaries from GitHub Releases —
-  `ripgrep`, `fd`, `delta`, `fzf`, `starship`, `nvim`, `exa`, `shellcheck`,
-  `hyperfine`, `shfmt`, `topgrade`, ... — plus shell plugins
-  (autosuggestions, fast-syntax-highlighting, zsh-vim-mode) and
-  completions. First shell after bootstrap downloads them; afterwards they
-  are cached.
+The zsh startup files only load locally installed dependencies. Starting zsh
+does not access the network or install anything.
 
 Startup cost is kept low by caching `brew shellenv`, `starship init`, and
 `zoxide init` output under `~/.cache/dotfiles/` (auto-regenerated after a

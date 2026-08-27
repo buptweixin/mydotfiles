@@ -10,19 +10,19 @@ set -e
 echo ''
 
 info() {
-	printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+	printf '\r  [ \033[00;34m..\033[0m ] %s\n' "$1"
 }
 
 user() {
-	printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+	printf '\r  [ \033[0;33m??\033[0m ] %s\n' "$1"
 }
 
 success() {
-	printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+	printf '\r\033[2K  [ \033[00;32mOK\033[0m ] %s\n' "$1"
 }
 
 fail() {
-	printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+	printf '\r\033[2K  [\033[0;31mFAIL\033[0m] %s\n' "$1"
 	echo ''
 	exit 1
 }
@@ -32,13 +32,15 @@ read_user_input() {
 	shift
 
 	if [[ -r /dev/tty ]]; then
-		read "$@" "${__resultvar?}" < /dev/tty
+		read -r "$@" "${__resultvar?}" < /dev/tty
 	else
 		fail 'Interactive input required, but no TTY is available'
 	fi
 }
 
 setup_gitconfig() {
+	local git_authorname git_authoremail
+
 	if ! [ -f git/gitconfig.local.symlink ]; then
 		info 'setup gitconfig'
 
@@ -52,7 +54,10 @@ setup_gitconfig() {
 		user ' - What is your github author email?'
 		read_user_input git_authoremail -e
 
-		sed -e "s/AUTHORNAME/${git_authorname?}/g" -e "s/AUTHOREMAIL/${git_authoremail?}/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example >git/gitconfig.local.symlink
+		cp git/gitconfig.local.symlink.example git/gitconfig.local.symlink
+		git config --file git/gitconfig.local.symlink user.name "$git_authorname"
+		git config --file git/gitconfig.local.symlink user.email "$git_authoremail"
+		git config --file git/gitconfig.local.symlink credential.helper "$git_credential"
 
 		success 'gitconfig'
 	fi

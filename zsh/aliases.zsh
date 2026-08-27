@@ -9,6 +9,11 @@ alias cls='clear' # Good 'ol Clear Screen command
 alias v='nvim'
 alias rl='realpath'
 alias sz='reload-zsh'
+alias exa='eza'
+alias ll='eza -al'
+alias l='eza -blF'
+alias la='eza -abghilmu'
+alias ls='eza --git --group-directories-first'
 
 # StarFactory is an internal Claude Code fork launched as `star`, but herdr
 # only bundles screen-detection manifests for upstream agents. Tag each

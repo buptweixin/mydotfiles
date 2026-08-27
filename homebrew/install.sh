@@ -10,6 +10,20 @@ readonly TUNA_HOMEBREW_GIT_BASE="https://mirrors.tuna.tsinghua.edu.cn/git/homebr
 readonly TUNA_HOMEBREW_BOTTLE_BASE="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 readonly TUNA_PYPI_SIMPLE_URL="https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
 
+homebrew_install_file=''
+homebrew_install_dir=''
+
+cleanup_install_artifacts() {
+	if [[ -n "$homebrew_install_file" ]]; then
+		rm -f "$homebrew_install_file"
+	fi
+	if [[ -n "$homebrew_install_dir" ]]; then
+		rm -rf "$homebrew_install_dir"
+	fi
+}
+
+trap cleanup_install_artifacts EXIT
+
 info() {
 	printf "  %s\n" "$1"
 }
@@ -68,8 +82,6 @@ load_brew_shellenv() {
 }
 
 install_homebrew() {
-	local install_dir
-
 	if command -v brew >/dev/null 2>&1; then
 		return
 	fi
@@ -77,12 +89,16 @@ install_homebrew() {
 	info "Installing Homebrew"
 
 	if tuna_homebrew_enabled; then
-		install_dir="$(mktemp -d "${TMPDIR:-/tmp}/brew-install.XXXXXX")"
-		git clone --depth=1 "$TUNA_HOMEBREW_GIT_BASE/install.git" "$install_dir"
-		/bin/bash "$install_dir/install.sh"
-		rm -rf "$install_dir"
+		homebrew_install_dir="$(mktemp -d "${TMPDIR:-/tmp}/brew-install.XXXXXX")"
+		git clone --depth=1 "$TUNA_HOMEBREW_GIT_BASE/install.git" "$homebrew_install_dir"
+		/bin/bash "$homebrew_install_dir/install.sh"
 	else
-		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+		homebrew_install_file="$(mktemp "${TMPDIR:-/tmp}/brew-install.XXXXXX")"
+		curl --fail --location --retry 3 --connect-timeout 10 --max-time 120 \
+			--silent --show-error \
+			--output "$homebrew_install_file" \
+			https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+		/bin/bash "$homebrew_install_file"
 	fi
 }
 

@@ -6,12 +6,14 @@ on:
       - "**.sh"
       - "script/**"
       - "bin/**"
+      - "zsh/**"
       - ".github/workflows/lint.yml"
   pull_request:
     paths:
       - "**.sh"
       - "script/**"
       - "bin/**"
+      - "zsh/**"
       - ".github/workflows/lint.yml"
 
 jobs:
@@ -20,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install shellcheck
-        run: sudo apt-get update && sudo apt-get install -y shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck zsh
       - name: Run shellcheck
         run: |
           # Check shell scripts only (bin/ also holds a few ruby scripts);
@@ -30,3 +32,18 @@ jobs:
               head -n1 "$f" | grep -q 'sh$' && printf '%s\n' "$f"
             done |
             xargs shellcheck
+
+  zsh-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check zsh syntax
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            zsh -n "$file"
+          done < <(
+            find . -path ./.git -prune -o \
+              \( -type f -name "*.zsh" -o -path "./zsh/zshrc.symlink" \) \
+              -print0
+          )

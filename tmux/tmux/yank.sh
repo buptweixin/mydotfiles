@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 is_app_installed() {
   type "$1" &>/dev/null
@@ -11,27 +11,64 @@ buf=$(cat "$@")
 
 copy_backend_remote_tunnel_port=$(tmux show-option -gvq "@copy_backend_remote_tunnel_port")
 copy_use_osc52_fallback=$(tmux show-option -gvq "@copy_use_osc52_fallback")
+remote_tunnel_port=''
+
+valid_remote_tunnel_port() {
+  local port=$1 normalized=$1
+
+  [[ "$port" =~ ^[0-9]+$ ]] || return 1
+  while [[ ${#normalized} -gt 1 && "$normalized" == 0* ]]; do
+    normalized=${normalized#0}
+  done
+  [[ "$normalized" != 0 ]] || return 1
+  if [[ ${#normalized} -lt 5 ]]; then
+    remote_tunnel_port=$normalized
+    return 0
+  fi
+  if [[ ${#normalized} -eq 5 ]] && (( 10#$normalized <= 65535 )); then
+    remote_tunnel_port=$normalized
+    return 0
+  fi
+  return 1
+}
 
 # Resolve copy backend: pbcopy (OSX), reattach-to-user-namespace (OSX), xclip/xsel (Linux)
 copy_backend=""
 if is_app_installed pbcopy; then
   copy_backend="pbcopy"
 elif is_app_installed reattach-to-user-namespace; then
-  copy_backend="reattach-to-user-namespace pbcopy"
+  copy_backend="reattach"
 elif [ -n "${DISPLAY-}" ] && is_app_installed xsel; then
-  copy_backend="xsel -i --clipboard"
+  copy_backend="xsel"
 elif [ -n "${DISPLAY-}" ] && is_app_installed xclip; then
-  copy_backend="xclip -i -f -selection primary | xclip -i -selection clipboard"
-elif [ -n "${copy_backend_remote_tunnel_port-}" ] \
+  copy_backend="xclip"
+elif is_app_installed nc \
+    && valid_remote_tunnel_port "${copy_backend_remote_tunnel_port-}" \
     && (netstat -f inet -nl 2>/dev/null || netstat -4 -nl 2>/dev/null) \
-      | grep -q "[.:]$copy_backend_remote_tunnel_port"; then
-  copy_backend="nc localhost $copy_backend_remote_tunnel_port"
+      | grep -Eq "[.:]${remote_tunnel_port}([[:space:]]|$)"; then
+  copy_backend="nc"
 fi
 
 # if copy backend is resolved, copy and exit
 if [ -n "$copy_backend" ]; then
-  printf "%s" "$buf" | eval "$copy_backend"
-  exit;
+  case "$copy_backend" in
+    pbcopy)
+      printf "%s" "$buf" | pbcopy
+      ;;
+    reattach)
+      printf "%s" "$buf" | reattach-to-user-namespace pbcopy
+      ;;
+    xsel)
+      printf "%s" "$buf" | xsel -i --clipboard
+      ;;
+    xclip)
+      printf "%s" "$buf" | xclip -i -f -selection primary | xclip -i -selection clipboard
+      ;;
+    nc)
+      printf "%s" "$buf" | nc localhost "$remote_tunnel_port"
+      ;;
+  esac
+  exit 0
 fi
 
 
@@ -65,4 +102,8 @@ esc="\033Ptmux;\033$esc\033\\"
 pane_active_tty=$(tmux list-panes -F "#{pane_active} #{pane_tty}" | awk '$1=="1" { print $2 }')
 target_tty="${SSH_TTY:-$pane_active_tty}"
 
-printf "$esc" > "$target_tty"
+if [[ -z "$target_tty" || ! -w "$target_tty" ]]; then
+  exit 0
+fi
+
+printf '%b' "$esc" > "$target_tty"

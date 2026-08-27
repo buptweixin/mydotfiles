@@ -7,11 +7,12 @@ git clone https://github.com/buptweixin/mydotfiles.git ~/.dotfiles
 cd ~/.dotfiles && script/bootstrap
 ```
 
-bootstrap 做三件事（全部幂等，可重复跑）：
+bootstrap 可重复运行，但并非每一步都是严格幂等：
 
 1. 链接所有 `*.symlink` 到 `~`（已正确链接的自动跳过，冲突交互式备份）
 2. 首次生成 `git/gitconfig.local.symlink`（询问 git 身份）
-3. `script/install`：装/配 Homebrew → `brew bundle` → 跑各 topic 的 install.sh
+3. `script/install`：装/配 Homebrew → `brew bundle` → 跑各 topic 的 install.sh；
+   tmux 配置覆盖前会生成带时间戳的备份
 
 **只重装某个 topic**：`script/install herdr tmux ghostty ...`
 
@@ -19,11 +20,14 @@ bootstrap 做三件事（全部幂等，可重复跑）：
 
 | 内容 | 命令 |
 |------|------|
-| brew 包（gh/bat/tmux/zoxide/herdr…） | `brew bundle --file=~/dotfiles/Brewfile`（在仓库根） |
+| brew 包（gh/bat/tmux/zoxide/herdr…） | `brew bundle --file=~/.dotfiles/Brewfile`（在仓库根） |
 | ghostty | cask 自动更新（`auto_updates`） |
-| zinit 工具二进制与插件 | `zinit update --all`（偶尔跑；zinit 自身 `zinit self-update`） |
+| zsh 插件 | 编辑 `zsh/plugins.lock` 中的完整 commit SHA 后运行 `script/install zsh` |
 | herdr | `herdr update` |
 | nvim 插件 | nvim 内 `:Lazy sync` |
+
+Homebrew 是滚动发行的包管理器；Brewfile 记录需要的包，不是严格的版本
+锁定文件。更新 zsh 插件时只按上述步骤手动调整并安装，不承诺自动升级。
 
 ## 启动缓存机制
 
@@ -42,7 +46,7 @@ rm -rf ~/.cache/dotfiles && exec zsh -l
 | zsh 启动慢 | zshrc 首行临时加 `zmodload zsh/zprof`，`zsh -i -c exit` 看热点；再查 `~/.cache/dotfiles` 是否失效 |
 | PATH 不对 | 看 `system/path.zsh`（第一阶段加载）与 `homebrew/path.zsh` 的缓存；`echo $path` 逐项核对 |
 | 别名/函数没生效 | 文件名不符约定（`*.zsh`、`path.zsh`、`completion.zsh`）；跑 `reload!` |
-| 补全缺失 | `~/.cache/dotfiles/completions/` 存在？重跑对应 topic 的 install.sh |
+| 补全缺失 | 确认已运行 `script/install zsh`；检查 `~/.local/share/dotfiles/zsh/plugins/zsh-completions/src`，必要时重跑安装器 |
 | ghostty 配置疑虑 | `ghostty +validate-config`；`ghostty +show-config` 看生效值 |
 | tmux 里环境变量旧 | `prefix+E` 刷新（renew_env.sh） |
 | tmux 复制不进剪贴板 | 确认在 ghostty/iTerm 类支持 OSC52 的终端里；`set-clipboard external` 已配 |
@@ -59,17 +63,18 @@ mytopic/
   path.zsh        # 可选：PATH/环境（最先加载）
   aliases.zsh     # 可选：任意 *.zsh 中段加载
   completion.zsh  # 可选：compinit 之后加载
-  install.sh      # 可选：script/install 会执行（幂等！）
+  install.sh      # 可选：script/install 会执行
   *.symlink       # 可选：链接为 ~/.<名字>
 ```
 
 install.sh 模板照抄 `ghostty/install.sh`（`set -euo pipefail` +
-已链接则跳过 + 时间戳备份）。Brewfile 装包，zinit 管 gh-r 二进制——
-**在 brew 里有的走 Brewfile**，只有 gh release 的才用 zinit。
+已链接则跳过 + 时间戳备份）。CLI 工具由 Brewfile/Homebrew 安装；zsh
+插件由 `zsh/install.sh` 按 `zsh/plugins.lock` 安装并固定完整 commit。
 
 ## 质量门禁
 
-- CI（`.github/workflows/lint.yml`）对全部 shell 脚本跑 shellcheck
+- CI（`.github/workflows/lint.yml`）对 shell 脚本跑 shellcheck，并对全部
+  `*.zsh` 与 `zsh/zshrc.symlink` 做 `zsh -n`
 - 本地提交前自查：`bash -n` / `zsh -n`，或直接看 CI
 
 ## 不变的约定

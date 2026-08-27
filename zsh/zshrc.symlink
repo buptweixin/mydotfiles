@@ -5,7 +5,6 @@ fi
 typeset -g _DOTFILES_ZSHRC_LOADED=1
 
 #=== HELPER METHODS ===================================
-function error() { print -P "%F{red}[ERROR]%f: %F{yellow}$1%f" && return 1 }
 function info() { print -P "%F{blue}[INFO]%f: %F{cyan}$1%f"; }
 
 # Cache `<tool> init zsh` output so we don't fork the tool (and generate
@@ -14,197 +13,126 @@ function info() { print -P "%F{blue}[INFO]%f: %F{cyan}$1%f"; }
 function cached_init() {
   local tool=$1; shift
   local bin cache_dir cache
-  command -v $tool >/dev/null || return 0
-  bin=$(command -v $tool)
-  cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles
-  cache=$cache_dir/$tool-init.zsh
-  if [[ ! -s $cache || $bin -nt $cache ]]; then
-    mkdir -p $cache_dir
-    $tool init zsh "$@" >| $cache 2>/dev/null && zcompile -Uz $cache 2>/dev/null
+  command -v "$tool" >/dev/null || return 0
+  bin=$(command -v "$tool")
+  cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles"
+  cache="$cache_dir/$tool-init.zsh"
+  if [[ ! -s "$cache" || "$bin" -nt "$cache" ]]; then
+    command mkdir -p -- "$cache_dir"
+    "$bin" init zsh "$@" >| "$cache" 2>/dev/null && zcompile -Uz "$cache" 2>/dev/null
   fi
-  [[ -s $cache ]] && source $cache
+  [[ -s "$cache" ]] && source "$cache"
 }
 
 # Resolve this script's real location through the ~/.zshrc symlink so the
-# layered topics below load from THIS checkout, not whatever clone happens
-# to sit at $HOME/.dotfiles (the old hardcoded path).
+# layered topics below load from THIS checkout, not an alternate checkout.
 export ZSH="${${(%):-%x}:A:h}"
+
 # all of our zsh files
 typeset -U config_files
-config_files=($ZSH/**/*.zsh)
+config_files=("$ZSH"/**/*.zsh(N))
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}
 do
-  source $file
+  source "$file"
 done
 
 # load everything but the path and completion files
 for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
 do
-  source $file
+  source "$file"
 done
 
-# ZI_REPO='zdharma-continuum'
-#=== ZINIT ============================================
-typeset -gAH ZINIT;
-ZINIT[HOME_DIR]=$HOME/.local/share/zsh/zinit  ZPFX=$ZINIT[HOME_DIR]/polaris
-ZINIT[BIN_DIR]=$ZINIT[HOME_DIR]/zinit.git ZINIT[OPTIMIZE_OUT_DISK_ACCESSES]=1
-ZINIT[COMPLETIONS_DIR]=$ZINIT[HOME_DIR]/completions ZINIT[SNIPPETS_DIR]=$ZINIT[HOME_DIR]/snippets
-ZINIT[ZCOMPDUMP_PATH]=$ZINIT[HOME_DIR]/zcompdump    ZINIT[PLUGINS_DIR]=$ZINIT[HOME_DIR]/plugins
-ZI_FORK='vladdoster'; ZI_REPO='zdharma-continuum'; GH_RAW_URL='https://raw.githubusercontent.com'
-if [[ ! -e $ZINIT[BIN_DIR] ]]; then
-  info 'downloading zinit' \
-  && command mkdir -pv $ZINIT[HOME_DIR] \
-  && command git clone \
-    https://github.com/$ZI_REPO/zinit.git \
-    $ZINIT[BIN_DIR] \
-  || error 'failed to clone zinit repository' \
-  && info 'setting up zinit' \
-  && command chmod g-rwX $ZINIT[HOME_DIR] \
-  && zcompile $ZINIT[BIN_DIR]/zinit.zsh \
-    && info 'successfully installed zinit'
-fi
-if [[ -e $ZINIT[BIN_DIR]/zinit.zsh ]]; then
-  source $ZINIT[BIN_DIR]/zinit.zsh \
-    && autoload -Uz _zinit \
-    && (( ${+_comps} )) \
-    && _comps[zinit]=_zinit
-else error "unable to find 'zinit.zsh'" && return 1
-fi
-#=== STATIC ZSH BINARY =======================================
-# Single-quote hook payloads so nothing expands while .zshrc is read.
-# The previous double-quoted form captured $PATH verbatim into an
-# unquoted `eval 'export PATH=...$PATH'`, and any PATH entry containing
-# a space split the command and truncated PATH mid-startup.
-zi for atpull"%atclone" depth"1" lucid nocompile nocompletions as"null" \
-    atclone"./install -e no -d ~/.local" atinit'path=("$HOME/.local/bin" $path)' \
-  @romkatv/zsh-bin
+#=== LOCAL LOCKED PLUGINS =============================
+typeset -g DOTFILES_ZSH_PLUGIN_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/dotfiles/zsh/plugins"
+typeset -g OMZ_DIR="$DOTFILES_ZSH_PLUGIN_DIR/oh-my-zsh"
+typeset -g ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles}"
+typeset -a missing_plugins
+missing_plugins=()
 
-#=== PROMPT ===========================================
-if [[ $(uname) == "Darwin" ]]; then
-    zinit lucid for \
-        as"command" \
-        from"gh-r" \
-        atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'cached_init starship' \
-        starship/starship
-elif [[ $(uname) == "Linux" ]]; then
-    zinit lucid for \
-        as"command" \
-        from"gh-r" \
-        bpick"*linux-musl*" \
-        atinit'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"' atload'cached_init starship' \
-        starship/starship
+# Keep the small set of OMZ libraries used by this configuration, without
+# loading OMZ's brew plugin (Homebrew's path.zsh already handles that setup).
+typeset -i omz_files_ok=1
+for file in \
+  "$OMZ_DIR/lib/clipboard.zsh" \
+  "$OMZ_DIR/lib/git.zsh" \
+  "$OMZ_DIR/lib/grep.zsh" \
+  "$OMZ_DIR/lib/key-bindings.zsh"
+do
+  if [[ -r "$file" ]]; then
+    source "$file"
+  else
+    omz_files_ok=0
+  fi
+done
+(( omz_files_ok )) || missing_plugins+=(oh-my-zsh)
+
+# zsh-completions must be on fpath before compinit registers completions.
+if [[ -d "$DOTFILES_ZSH_PLUGIN_DIR/zsh-completions/src" ]]; then
+  fpath=("$DOTFILES_ZSH_PLUGIN_DIR/zsh-completions/src" $fpath)
+else
+  missing_plugins+=(zsh-completions)
 fi
 
+autoload -Uz compinit
+compinit
 
-#=== OH-MY-ZSH & PREZTO PLUGINS =======================
-# OMZL::completion is deliberately NOT loaded: it runs bashcompinit, which
-# triggers a second compinit. Its zstyles live in zsh/completion.zsh.
-zinit for is-snippet \
-  OMZL::{'clipboard','git','grep','key-bindings'}.zsh \
-  OMZP::brew \
-  PZT::modules/{'rsync'}
-
-#=== COMPLETIONS ======================================
-local GH_RAW_URL='https://raw.githubusercontent.com'
-install_completion(){ zinit for as'completion' nocompile id-as"$1" is-snippet "$GH_RAW_URL/$2"; }
-install_completion 'brew-completion/_brew'     'Homebrew/brew/master/completions/zsh/_brew'
-install_completion 'docker-completion/_docker' 'docker/cli/master/contrib/completion/zsh/_docker'
-install_completion 'exa-completion/_exa'       'ogham/exa/master/completions/zsh/_exa'
-install_completion 'fd-completion/_fd'         'sharkdp/fd/master/contrib/completion/_fd'
-#=== zsh-vim-mode cursor configuration [[[
+#=== zsh-vim-mode cursor configuration ================
 MODE_CURSOR_VICMD="green block";              MODE_CURSOR_VIINS="#20d08a blinking bar"
 MODE_INDICATOR_REPLACE='%F{9}%F{1}REPLACE%f'; MODE_INDICATOR_VISUAL='%F{12}%F{4}VISUAL%f'
 MODE_INDICATOR_VIINS='%F{15}%F{8}INSERT%f';   MODE_INDICATOR_VICMD='%F{10}%F{2}NORMAL%f'
 MODE_INDICATOR_VLINE='%F{12}%F{4}V-LINE%f';   MODE_CURSOR_SEARCH="#ff00ff blinking underline"
 setopt PROMPT_SUBST
 export KEYTIMEOUT=1
-export LANG=en_US.UTF-8
-export LC_ALL="en_US.UTF-8"
+if [[ -r "$DOTFILES_ZSH_PLUGIN_DIR/zsh-vim-mode/zsh-vim-mode.plugin.zsh" ]]; then
+  source "$DOTFILES_ZSH_PLUGIN_DIR/zsh-vim-mode/zsh-vim-mode.plugin.zsh"
+  bindkey -M vicmd '^e' edit-command-line
+else
+  missing_plugins+=(zsh-vim-mode)
+fi
+
+#=== zsh-autosuggestions ==============================
+if [[ -r "$DOTFILES_ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+  source "$DOTFILES_ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
+  bindkey '^_' autosuggest-execute
+  bindkey '^y' autosuggest-accept
+else
+  missing_plugins+=(zsh-autosuggestions)
+fi
+
+#=== fast-syntax-highlighting =========================
+if [[ -r "$DOTFILES_ZSH_PLUGIN_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh" ]]; then
+  source "$DOTFILES_ZSH_PLUGIN_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+  FAST_HIGHLIGHT[chroma-man]=''
+else
+  missing_plugins+=(fast-syntax-highlighting)
+fi
+
+if (( ${#missing_plugins} )); then
+  info "Missing zsh plugins: ${(j:, :)missing_plugins}. Run: script/install zsh"
+fi
+
 export LC_COLLATE='C'
 export LESS='-RMs'
 export PAGER=less
 RPS1='${MODE_INDICATOR_PROMPT} ${vcs_info_msg_0_}'
-#=== ANNEXES ==========================================
-zinit light-mode for "$ZI_REPO"/zinit-annex-{'bin-gem-node','binary-symlink','patch-dl','submods'}
 
-#=== GITHUB BINARIES ==================================
-zinit from'gh-r' lbin'!' nocompile for \
-  @dandavison/delta @sharkdp/hyperfine      \
-  @koalaman/shellcheck @pemistahl/grex     \
-  @r-darwish/topgrade           \
-  lbin'!* -> shfmt'  @mvdan/sh           \
-  lbin'!**/nvim' @neovim/neovim      \
-  lbin'!**/rg'       @BurntSushi/ripgrep \
-  lbin'!**/exa' atinit"
-    alias ll='exa -al';
-    alias l='exa -blF'; 
-    alias la='exa -abghilmu';
-    alias ls='exa --git --group-directories-first'" \
-  @ogham/exa
-
-
-if [[ $(uname) == "Darwin" ]]; then
-    zinit ice as"command" from"gh-r" mv"fd* -> fd" pick"fd/fd"
-    zinit light sharkdp/fd
-elif [[ $(uname) == "Linux" ]]; then
-    zinit ice as"command" from"gh-r" mv"fd* -> fd" pick"fd/fd" bpick"*linux-musl*"
-    zinit light sharkdp/fd
+# Homebrew provides fzf; the installer creates this local shell integration
+# atomically. Never generate it during shell startup.
+typeset -g FZF_ZSH_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles/fzf.zsh"
+if [[ -s "$FZF_ZSH_CACHE" ]]; then
+  source "$FZF_ZSH_CACHE"
 fi
 
-zinit \
-    as'command' \
-    atclone'mkdir -p $ZPFX/bin;
-      cp -vf fzf $ZPFX/bin' \
-    atpull'%atclone' \
-    dl'https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh -> _fzf_completion;
-      https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh -> key-bindings.zsh;
-      https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf-tmux.1 -> $ZPFX/man/man1/fzf-tmux.1;
-      https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1 -> $ZPFX/man/man1/fzf.1' \
-    from'gh-r' \
-    id-as'junegunn/fzf' \
-    lucid \
-    nocompile \
-    pick'$ZPFX/bin/fzf' \
-    src'key-bindings.zsh' \
-  for @junegunn/fzf
-
-zinit as'command' light-mode for \
-  pick'revolver' @molovo/revolver \
-  pick'zunit' atclone'./build.zsh' @zunit-zsh/zunit
-#=== MISC. ============================================
-zinit light-mode for \
-        atinit"bindkey -M vicmd '^e' edit-command-line" compile'zsh-vim-mode*.zsh' \
-    softmoth/zsh-vim-mode \
-        atpull'zinit creinstall -q .' blockf \
-    zsh-users/zsh-completions \
-        atload'_zsh_autosuggest_start' \
-        atinit"
-            ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50
-            bindkey '^_' autosuggest-execute
-            bindkey '^y' autosuggest-accept" \
-    zsh-users/zsh-autosuggestions \
-        atclone'(){local f;cd -q →*;for f (*~*.zwc){zcompile -Uz -- ${f}};}' \
-        atload'FAST_HIGHLIGHT[chroma-man]=' atpull'%atclone' \
-        compile'.*fast*~*.zwc' nocompletions \
-    $ZI_REPO/fast-syntax-highlighting
-
-# Initialize completions after zinit has registered completion sources.
-autoload -Uz compinit
-if (( ${+functions[zicompinit]} )); then
-  zicompinit
-  zicdreplay
-else
-  compinit
-fi
-
+cached_init starship
 cached_init zoxide --cmd z
 
-# load every completion after autocomplete loads
+# Initialize completion styles after compinit has registered local sources.
 for file in ${(M)config_files:#*/completion.zsh}
 do
-  source $file
+  source "$file"
 done
 
 unset config_files
@@ -212,14 +140,12 @@ unset config_files
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but
 # you'll have access to them in your scripts.
-if [[ -a ~/.localrc ]]
-then
-  source ~/.localrc
+if [[ -a "$HOME/.localrc" ]]; then
+  source "$HOME/.localrc"
 fi
 
-
-if [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -e "${HOME}/.iterm2_shell_integration.zsh" ]]; then
-  source "${HOME}/.iterm2_shell_integration.zsh"
+if [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -e "$HOME/.iterm2_shell_integration.zsh" ]]; then
+  source "$HOME/.iterm2_shell_integration.zsh"
 
   _dotfiles_iterm2_precmd() {
     print -rn -- "\x1b]1337;CurrentDir=$(pwd)\x07"
@@ -228,6 +154,8 @@ if [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -e "${HOME}/.iterm2_shell_integratio
   precmd_functions+=(_dotfiles_iterm2_precmd)
 fi
 
-export GUILE_LOAD_PATH="/opt/homebrew/share/guile/site/3.0"
-export GUILE_LOAD_COMPILED_PATH="/opt/homebrew/lib/guile/3.0/site-ccache"
-export GUILE_SYSTEM_EXTENSIONS_PATH="/opt/homebrew/lib/guile/3.0/extensions"
+if [[ -d /opt/homebrew/share/guile/site/3.0 ]]; then
+  export GUILE_LOAD_PATH=/opt/homebrew/share/guile/site/3.0
+  export GUILE_LOAD_COMPILED_PATH=/opt/homebrew/lib/guile/3.0/site-ccache
+  export GUILE_SYSTEM_EXTENSIONS_PATH=/opt/homebrew/lib/guile/3.0/extensions
+fi

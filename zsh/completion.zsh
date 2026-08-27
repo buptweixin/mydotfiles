@@ -33,7 +33,9 @@ zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-dir
 # Use caching so that commands like apt and dpkg complete are usable
 zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh-completions"
-command mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh-completions"
+if [[ ! -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh-completions" ]]; then
+  command mkdir -p -- "${XDG_CACHE_HOME:-$HOME/.cache}/zsh-completions"
+fi
 
 # Don't complete uninteresting users
 zstyle ':completion:*:*:*:users' ignored-patterns \
