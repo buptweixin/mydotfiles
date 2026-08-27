@@ -45,9 +45,11 @@ keybind = ctrl+q>c=new_tab
 keybind = ctrl+q>n=next_tab
 keybind = ctrl+q>p=previous_tab
 
-# quick terminal (quake-style dropdown, autohides on focus loss;
-# only triggerable while a Ghostty surface has focus)
-keybind = super+grave_accent=toggle_quick_terminal
+# quick terminal (quake-style dropdown, autohides on focus loss).
+# `global:` registers a system-wide hotkey, so the dropdown works even when
+# Ghostty is unfocused — no prefix would make it fire only while a Ghostty
+# surface has focus.
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
 quick-terminal-position = top
 quick-terminal-animation-duration = 0.15
 
@@ -55,4 +57,4 @@ quick-terminal-animation-duration = 0.15
 keybind = ctrl+q>r=reload_config
 
 # tmux
-initial-command = /bin/zsh -lc 'exec ~/.dotfiles/bin/tmx'
+initial-command = /bin/zsh -lc 'exec $HOME/Documents/10_work/workspace/code/github/mydotfiles/bin/tmx'
