@@ -23,8 +23,8 @@
 
 | 场景 | 用什么 | 入口 |
 |------|--------|------|
-| 日常 shell、本地开发、nvim | ghostty 标签 + tmux | 打开 ghostty 自动进 `tmx`；`cmd+t` 新标签 |
-| 跑编码 agent（长任务、合盖走人） | ghostty 标签 + herdr | `cmd+t` 然后敲 `hr` |
+| 日常 shell、本地开发、nvim | ghostty 标签 + tmux | `cmd+t` 新标签 → 敲 `tmx` |
+| 跑编码 agent（长任务、合盖走人） | ghostty 标签 + herdr | 打开 ghostty 默认进 herdr；或 `cmd+t` 敲 `hr` |
 | 临时看一眼 agent 状态 / 丢个命令 | quick terminal | `` cmd+` `` |
 | 连远程服务器干活 | tmux 远程会话 | `ssht <host>`（tmux 里用 `tssh <host>`） |
 | 本地轻量并行（看日志 + 写码） | ghostty 原生 splits | `cmd+d` / `cmd+shift+d` |
@@ -34,7 +34,7 @@
 
 ## 一天的典型工作流
 
-1. **开机**：ghostty `window-save-state = always` 恢复窗口；首个标签自动 `tmx` attach 回 `main` 会话（昨天的一切都还在）。
+1. **开机**：ghostty `window-save-state = always` 恢复窗口；首个窗口默认进 herdr，agent 都还在跑。要接着昨天的 shell：`cmd+t` → `tmx` attach 回 `main` 会话。
 2. **进入项目**：`z <项目名几个字母>` 直达目录（zoxide 按频率排序）；`v` 打开 nvim。
 3. **起 agent**：`cmd+t` 新标签 → `hr` → 在项目目录的 herdr workspace 里让 claude code / codex 干活 → `prefix+d` detach，合盖走人。
 4. **回来看进度**：quick terminal（`` cmd+` ``）→ `hr` → 侧栏看每个 agent 的 working / blocked / idle 状态；blocked 的去回答问题。

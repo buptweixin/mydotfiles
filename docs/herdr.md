@@ -20,7 +20,7 @@ herdr **不包装不替代** claude code / codex 等工具，只拥有它们跑�
 
 | 操作 | 做法 |
 |------|------|
-| 在项目里起 agent 工作区 | `cmd+t` 开新 ghostty 标签 → 敲 `hr`（= `exec herdr`） |
+| 在项目里起 agent 工作区 | 打开 ghostty 默认进 herdr；或 `cmd+t` 开新 ghostty 标签 → 敲 `hr`（= `exec herdr`） |
 | 临时巡检 | quick terminal（`` cmd+` ``）→ `hr` → 看侧栏状态 → 失焦自动收起 |
 | 离开 | `prefix+d` detach（对齐 tmux 肌肉记忆；原默认是 `prefix+q`） |
 | 回来 | 任意终端再跑 `hr`（或 `herdr`） |

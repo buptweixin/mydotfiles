@@ -12,7 +12,7 @@
 | `ssht <host>` | SSH 连接并 attach 远端同名 tmux 会话（见 [git-and-remote.md](git-and-remote.md)） |
 | `tssh <host>` | 同上，但在 tmux 内新开一个以 host 命名的 window |
 
-ghostty 的 `initial-command` 直接跑 `tmx`，所以每个标签天然在 tmux 里。
+ghostty 启动首窗口默认进 herdr（见 [herdr.md](herdr.md)）；要进 tmux 在任意标签敲 `tmx`。
 
 ## 前缀与通用
 

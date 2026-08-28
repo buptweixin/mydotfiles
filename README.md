@@ -103,8 +103,9 @@ Git identity is intentionally **not** in `git/gitconfig.symlink`; it lives in
 [herdr](https://github.com/herdrdev/herdr) is a persistent terminal runtime
 for coding agents (claude code, codex, ...) — sessions live in a background
 server and survive terminal close, lid close, and reboot. It complements
-tmux rather than replacing it: tmux stays the default (ghostty runs `tmx`),
-herdr owns the agent workspaces.
+tmux rather than replacing it: ghostty's first surface launches into
+herdr, human shells live in tmux (`tmx`), and herdr owns the agent
+workspaces.
 
 - `hr` runs herdr in the current directory — best in a dedicated ghostty
   tab (`cmd+t`, then `hr`).

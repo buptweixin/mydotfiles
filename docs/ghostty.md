@@ -68,7 +68,7 @@ quick-terminal-animation-duration = 0.15
 
 ## 与 tmux / herdr 的分工
 
-- ghostty 标签默认跑 `tmx`（进 tmux）；herdr 用独立标签 `hr`
+- 启动首个窗口默认进 herdr（`initial-command` 只作用于首个 surface）；后续新标签是普通 shell，`tmx` / `hr` 手动敲
 - 原生 splits 适合「不需要会话存活的临时并行」；需要 detach 存活的用 tmux
 - 真彩透传已配置（tmux 侧 `terminal-features ...,xterm-ghostty:RGB`）
 

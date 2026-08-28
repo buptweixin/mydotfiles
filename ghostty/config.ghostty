@@ -56,5 +56,6 @@ quick-terminal-animation-duration = 0.15
 # reload config
 keybind = ctrl+q>r=reload_config
 
-# tmux
-initial-command = /bin/zsh -lc 'exec $HOME/Documents/10_work/workspace/code/github/mydotfiles/bin/tmx'
+# herdr on launch. initial-command only applies to the first surface Ghostty
+# creates; later tabs/splits get a plain zsh — run `tmx` or `hr` there.
+initial-command = /bin/zsh -lc 'exec herdr'
