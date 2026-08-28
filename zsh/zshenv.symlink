@@ -17,3 +17,8 @@ path=(${path:#*[[:space:]]*})
 # and plenty of tooling assumes the core dirs exist in any environment.
 # typeset -U keeps the first occurrence, so existing entries win.
 path=(/usr/local/bin /System/Cryptexes/App/usr/bin /usr/bin /bin /usr/sbin /sbin $path)
+
+# User-local installs (uv, pipx-style CLIs) — installed to ~/.local/bin by
+# tools that assume it's on PATH. Prepended so they shadow system/brew
+# versions. Same file as the floor so herdr's non-login panes see it too.
+[[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
