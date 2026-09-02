@@ -6,7 +6,7 @@
 onboarding = false
 
 [theme]
-name = "tokyo-night"
+name = "gruvbox"
 auto_switch = false
 
 [keys]
@@ -41,4 +41,4 @@ show_agent_labels_on_pane_borders = true
 enabled = false
 
 [ui.toast]
-delivery = "system"
+delivery = "terminal"
