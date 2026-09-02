@@ -2,6 +2,10 @@ git/gitconfig.local.symlink
 ssh/config.local
 
 Brewfile.lock.json
+
+# Karabiner machine-local state (auto backups, json_writer tmp files)
+karabiner/karabiner/automatic_backups/
+karabiner/karabiner/*.tmp
 .DS_Store
 .zcode/
 
