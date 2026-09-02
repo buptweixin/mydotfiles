@@ -1,0 +1,19 @@
+zsh/zshenv.symlink
+  s_eb61a2a6a4783b::t_cb3836b6225f2a 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "54b4483df6538d49cc365e9caae15ff5fe7a0622",
+  "prompts": {},
+  "sessions": {
+    "s_eb61a2a6a4783b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9edb175c-a591-41b7-92e7-d08f93a347a4",
+        "model": "deepseek-v4-flash-vision"
+      },
+      "human_author": "buptweixin <weixin.bupt.ml@gmail.com>"
+    }
+  }
+}
