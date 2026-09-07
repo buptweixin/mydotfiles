@@ -1,0 +1,32 @@
+# pi extension packages — installed by pi/install.sh via `pi install`.
+# One package source per line. This is the single source of truth for the
+# extension set; settings.json itself is NOT symlinked because pi rewrites it
+# at runtime (lastChangelogVersion, package list). Keep this list in sync with
+# `pi list` after manual `pi install`/`pi remove`.
+#
+# Load order matters for some extensions:
+#   - pi-extension-settings MUST precede any extension that registers settings
+#     (e.g. pi-powerbar), or registration events are silently dropped.
+npm:@juanibiapina/pi-extension-settings
+npm:@juanibiapina/pi-powerbar
+npm:pi-hashline-edit-pro
+npm:pi-slopchop
+npm:@narumitw/pi-goal
+npm:@narumitw/pi-plan-mode
+npm:@narumitw/pi-subagents
+npm:@juicesharp/rpiv-ask-user-question
+npm:@juicesharp/rpiv-todo
+npm:@narumitw/pi-btw
+npm:pi-mcp-adapter
+npm:@ff-labs/pi-fff
+npm:pi-rtk-optimizer
+npm:@narumitw/pi-lsp
+npm:pi-agent-browser-native
+npm:pi-add-dir
+npm:pi-workspace-history
+npm:@narumitw/pi-caffeinate
+npm:@tmustier/pi-raw-paste
+npm:@victor-software-house/pi-curated-themes
+npm:pi-autoresearch
+npm:pi-cache-optimizer
+npm:@jayjanii/pi-minimax-mcp

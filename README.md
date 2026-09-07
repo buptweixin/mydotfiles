@@ -31,8 +31,8 @@ optionally generates `git/gitconfig.local.symlink` from its `.example`
 1. sets up Homebrew (installing it from the TUNA mirror if missing — set
    `DOTFILES_DISABLE_TUNA_HOMEBREW=1` to keep official sources), and
 2. runs `brew bundle` with the `Brewfile` (`bat`, `gh`, `ncdu`, `node`, `npm`,
-    `tmux`, `zoxide`, `zsh`), then
-3. runs each topic's `install.sh` (ghostty, ssh, tmux, zsh, ...); the zsh
+    `rtk`, `tmux`, `zoxide`, `zsh`), then
+3. runs each topic's `install.sh` (ghostty, pi, ssh, tmux, zsh, ...); the zsh
    installer installs plugins from `zsh/plugins.lock` at their pinned commits.
 
 To re-run a single topic's installer: `script/install zsh` (or `script/install ssh tmux`).

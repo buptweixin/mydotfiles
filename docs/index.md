@@ -11,5 +11,6 @@
 | [shell.md](shell.md) | zsh 日常武器库：别名、z/fzf 导航、补全行为、vim-mode | 想更快地操作 shell |
 | [git-and-remote.md](git-and-remote.md) | git 工具链（delta/gh/别名/bin 脚本）+ ssh 分层配置与远程工作流 | 提交、看 diff、连远程机器 |
 | [maintenance.md](maintenance.md) | 安装/更新/缓存机制/排障/如何添加新 topic | 环境出问题，或想改这套 dotfiles 本身 |
+| [pi.md](pi.md) | pi 编码 agent：插件集与配置入库范围、安装行为、新机器复现、pi-lsp 家目录限制 | 用 mydotfiles 管理 pi 的初始化 |
 
 新机器初始化见根目录 [README.md](../README.md) 的 install 一节。

@@ -1,0 +1,26 @@
+{
+  "timeout": 30000,
+  "servers": {
+    "ty": {
+      "command": ["ty", "server"],
+      "extensions": [".py", ".pyi"],
+      "env": {
+        "PATH": "/Users/weixin/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+      },
+      "skipDirectories": [".cache", ".config", ".local", ".cargo", ".rustup", "miniconda", "miniforge3", "anaconda3", "site-packages", "__pycache__", ".venv", "venv"]
+    },
+    "ruff": {
+      "command": ["ruff", "server"],
+      "extensions": [".py", ".pyi"],
+      "env": {
+        "PATH": "/Users/weixin/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+      },
+      "skipDirectories": [".cache", ".config", ".local", ".cargo", ".rustup", "miniconda", "miniforge3", "anaconda3", "site-packages", "__pycache__", ".venv", "venv"],
+      "initialization": { "settings": { "lint": { "exclude": [".config/**", ".cache/**", ".local/**", ".cargo/**", ".rustup/**", "miniconda/**", "miniforge3/**", "anaconda3/**", "site-packages/**", "**/__pycache__/**", ".venv/**", "venv/**"] } } }
+    },
+    "bash-language-server": {
+      "command": ["bash-language-server", "start"],
+      "extensions": [".sh", ".bash", ".zsh", ".command"]
+    }
+  }
+}

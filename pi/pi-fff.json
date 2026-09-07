@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dmtrKovalenko/fff/main/packages/pi-fff/pi-fff.schema.json",
+  "mode": "tools-and-ui",
+  "enableHomeDirScanning": false,
+  "warnOnHomeDirScan": false
+}
