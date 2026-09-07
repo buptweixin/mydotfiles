@@ -1,0 +1,35 @@
+pi/install.sh
+  s_24bc0704c88324::t_e4a3fc0fb95c6c 1-144
+  s_24bc0704c88324::t_b35b4709422c5a 145-147
+  s_24bc0704c88324::t_8a6fc09b4da9f8 148-149
+docs/pi.md
+  s_24bc0704c88324::t_c0db2de3db4eed 1-87
+pi/pi-fff.json
+  s_24bc0704c88324::t_83bd4e665e0b70 1-6
+pi/pi-lsp.json
+  s_24bc0704c88324::t_88c27965791479 1-26
+pi/rtk-optimizer.json
+  s_24bc0704c88324::t_aff8d2ee8a89a6 1-30
+pi/packages.txt
+  s_24bc0704c88324::t_7a7cf7743be2a5 1-32
+Brewfile
+  s_24bc0704c88324::t_4c11e903be4f97 22
+docs/index.md
+  s_24bc0704c88324::t_31aa8edbac0a33 14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "71fa827716b9b493b15a43860b94977b9575dbef",
+  "prompts": {},
+  "sessions": {
+    "s_24bc0704c88324": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a079b2-a4bb-77b9-9f2a-c34e117844d2",
+        "model": "TeleAI-002"
+      },
+      "human_author": "buptweixin <weixin.bupt.ml@gmail.com>"
+    }
+  }
+}
