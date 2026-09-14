@@ -8,6 +8,7 @@ karabiner/karabiner/automatic_backups/
 karabiner/karabiner/*.tmp
 .DS_Store
 .zcode/
+.omo/
 
 __pycache__/
 node_modules/
