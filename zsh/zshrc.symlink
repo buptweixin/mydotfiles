@@ -75,8 +75,24 @@ else
   missing_plugins+=(zsh-completions)
 fi
 
+# A full compinit audits every completion file (compaudit) — the slowest
+# part of startup. Run the full audit at most once a day; other startups
+# trust the existing dump with -C. The dump is zcompiled like the other
+# caches. Remove $ZSH_CACHE_DIR/zcompdump* to force a rebuild.
 autoload -Uz compinit
-compinit
+() {
+  local zcd="$ZSH_CACHE_DIR/zcompdump"
+  local -a stale
+  command mkdir -p -- "$ZSH_CACHE_DIR"
+  stale=( "$zcd"(N.mh+24) )
+  if [[ -s "$zcd" && ${#stale} -eq 0 ]]; then
+    compinit -C -d "$zcd"
+  else
+    compinit -d "$zcd"
+    command touch -- "$zcd"
+    zcompile -Uz "$zcd" 2>/dev/null
+  fi
+}
 
 #=== zsh-vim-mode cursor configuration ================
 MODE_CURSOR_VICMD="green block";              MODE_CURSOR_VIINS="#20d08a blinking bar"
