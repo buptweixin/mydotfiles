@@ -3,3 +3,9 @@
         email = AUTHOREMAIL
 [credential]
         helper = GIT_CREDENTIAL_HELPER
+# Machine-specific integrations go here too, e.g. the git-ai daemon's
+# trace2 hook (absolute per-user path, so it must not live in the shared
+# gitconfig):
+# [trace2]
+#         eventTarget = af_unix:stream:/Users/YOU/.git-ai/internal/daemon/trace2.sock
+#         eventNesting = 0
