@@ -44,6 +44,6 @@ jobs:
             zsh -n "$file"
           done < <(
             find . -path ./.git -prune -o \
-              \( -type f -name "*.zsh" -o -path "./zsh/zshrc.symlink" \) \
+              \( -type f -name "*.zsh" -o -path "./zsh/*.symlink" \) \
               -print0
           )

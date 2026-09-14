@@ -30,8 +30,8 @@ optionally generates `git/gitconfig.local.symlink` from its `.example`
 
 1. sets up Homebrew (installing it from the TUNA mirror if missing — set
    `DOTFILES_DISABLE_TUNA_HOMEBREW=1` to keep official sources), and
-2. runs `brew bundle` with the `Brewfile` (`bat`, `gh`, `ncdu`, `node`, `npm`,
-    `rtk`, `tmux`, `zoxide`, `zsh`), then
+2. runs `brew bundle` with the `Brewfile` (tmux, zsh, neovim, starship, fzf,
+    and friends — see the `Brewfile` for the full list), then
 3. runs each topic's `install.sh` (ghostty, pi, ssh, tmux, zsh, ...); the zsh
    installer installs plugins from `zsh/plugins.lock` at their pinned commits.
 

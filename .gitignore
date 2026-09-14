@@ -6,10 +6,7 @@ Brewfile.lock.json
 # Karabiner machine-local state (auto backups, json_writer tmp files)
 karabiner/karabiner/automatic_backups/
 karabiner/karabiner/*.tmp
-.DS_Store
+
+# Local agent/tool state
 .zcode/
 .omo/
-
-__pycache__/
-node_modules/
-yarn.lock
