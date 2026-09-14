@@ -7,6 +7,9 @@ SCRIPT_DIR="$(
   pwd -P
 )"
 
+# shellcheck source=script/lib/link.sh
+source "$SCRIPT_DIR/../script/lib/link.sh"
+
 SSH_DIR="$HOME/.ssh"
 SSH_CONFIG="$SSH_DIR/config"
 SSH_CONFIG_D_DIR="$SSH_DIR/config.d"
@@ -16,27 +19,6 @@ SSH_LOCAL_CONFIG="$SSH_DIR/config.local"
 SOURCE_SHARED_CONFIG="$SCRIPT_DIR/config.d/50-dotfiles.conf"
 TARGET_SHARED_CONFIG="$SSH_CONFIG_D_DIR/50-dotfiles.conf"
 SOURCE_LOCAL_TEMPLATE="$SCRIPT_DIR/config.local.example"
-
-link_shared_config() {
-  local current_src backup_target
-
-  if [[ -L "$TARGET_SHARED_CONFIG" ]]; then
-    current_src="$(readlink "$TARGET_SHARED_CONFIG")"
-    if [[ "$current_src" == "$SOURCE_SHARED_CONFIG" ]]; then
-      echo "SSH shared config is already linked."
-      return
-    fi
-  fi
-
-  if [[ -e "$TARGET_SHARED_CONFIG" || -L "$TARGET_SHARED_CONFIG" ]]; then
-    backup_target="${TARGET_SHARED_CONFIG}.bak.$(date +%Y%m%d%H%M%S)"
-    echo "Backup existing SSH shared config to ${backup_target}"
-    mv "$TARGET_SHARED_CONFIG" "$backup_target"
-  fi
-
-  ln -s "$SOURCE_SHARED_CONFIG" "$TARGET_SHARED_CONFIG"
-  echo "Linked SSH shared config to ${TARGET_SHARED_CONFIG}"
-}
 
 ensure_include_line() {
   local config_file=$1
@@ -58,7 +40,7 @@ ensure_include_line() {
 mkdir -p "$SSH_DIR" "$SSH_CONFIG_D_DIR" "$SSH_CONTROLMASTERS_DIR"
 chmod 700 "$SSH_DIR" "$SSH_CONTROLMASTERS_DIR"
 
-link_shared_config
+link_managed "$SOURCE_SHARED_CONFIG" "$TARGET_SHARED_CONFIG"
 
 if [[ ! -e "$SSH_CONFIG" ]]; then
   cat >"$SSH_CONFIG" <<'EOF'

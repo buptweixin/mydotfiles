@@ -20,6 +20,9 @@ SCRIPT_DIR="$(
 	pwd -P
 )"
 
+# shellcheck source=script/lib/link.sh
+source "$SCRIPT_DIR/../script/lib/link.sh"
+
 PI_AGENT_DIR="$HOME/.pi/agent"
 PI_RTK_DIR="$PI_AGENT_DIR/extensions/pi-rtk-optimizer"
 
@@ -78,36 +81,10 @@ install_extensions() {
 	fi
 }
 
-link_config() {
-	local src="$1"
-	local dst="$2"
-
-	mkdir -p "$(dirname "$dst")"
-
-	if [[ -L "$dst" ]]; then
-		local current_src
-		current_src="$(readlink "$dst")"
-		if [[ "$current_src" == "$src" ]]; then
-			echo "pi: already linked — $(basename "$dst")"
-			return
-		fi
-	fi
-
-	if [[ -e "$dst" || -L "$dst" ]]; then
-		local backup
-		backup="${dst}.bak.$(date +%Y%m%d%H%M%S)"
-		echo "pi: backup existing $(basename "$dst") to ${backup}"
-		mv "$dst" "$backup"
-	fi
-
-	ln -s "$src" "$dst"
-	echo "pi: linked $(basename "$dst")"
-}
-
 link_configs() {
-	link_config "$SCRIPT_DIR/pi-lsp.json"        "$PI_AGENT_DIR/pi-lsp.json"
-	link_config "$SCRIPT_DIR/pi-fff.json"        "$PI_AGENT_DIR/pi-fff.json"
-	link_config "$SCRIPT_DIR/rtk-optimizer.json" "$PI_RTK_DIR/config.json"
+	link_managed "$SCRIPT_DIR/pi-lsp.json"        "$PI_AGENT_DIR/pi-lsp.json"
+	link_managed "$SCRIPT_DIR/pi-fff.json"        "$PI_AGENT_DIR/pi-fff.json"
+	link_managed "$SCRIPT_DIR/rtk-optimizer.json" "$PI_RTK_DIR/config.json"
 }
 
 install_lsp_deps() {

@@ -7,6 +7,9 @@ SCRIPT_DIR="$(
 	pwd -P
 )"
 
+# shellcheck source=script/lib/link.sh
+source "$SCRIPT_DIR/../script/lib/link.sh"
+
 HERDR_CONFIG_SOURCE="$SCRIPT_DIR/config.toml"
 HERDR_CONFIG_TARGET="${XDG_CONFIG_HOME:-$HOME/.config}/herdr/config.toml"
 HERDR_DETECTION_REMOTE="$HOME/.local/state/herdr/agent-detection/remote/claude.toml"
@@ -19,29 +22,6 @@ if ! command -v herdr >/dev/null 2>&1; then
 	echo "herdr is not installed; run script/bootstrap (the Brewfile installs it)." >&2
 	exit 1
 fi
-
-link_herdr_config() {
-	local current_src backup_target
-
-	mkdir -p "$(dirname "$HERDR_CONFIG_TARGET")"
-
-	if [[ -L "$HERDR_CONFIG_TARGET" ]]; then
-		current_src="$(readlink "$HERDR_CONFIG_TARGET")"
-		if [[ "$current_src" == "$HERDR_CONFIG_SOURCE" ]]; then
-			echo "Herdr config is already linked."
-			return
-		fi
-	fi
-
-	if [[ -e "$HERDR_CONFIG_TARGET" || -L "$HERDR_CONFIG_TARGET" ]]; then
-		backup_target="${HERDR_CONFIG_TARGET}.bak.$(date +%Y%m%d%H%M%S)"
-		echo "Backup existing Herdr config to ${backup_target}"
-		mv "$HERDR_CONFIG_TARGET" "$backup_target"
-	fi
-
-	ln -s "$HERDR_CONFIG_SOURCE" "$HERDR_CONFIG_TARGET"
-	echo "Linked Herdr config to ${HERDR_CONFIG_TARGET}"
-}
 
 sync_starfactory_detection() {
 	# StarFactory (the `star` internal Claude Code fork) is recognized via
@@ -85,6 +65,6 @@ generate_completion() {
 	echo "Generated herdr completion to ${COMPLETIONS_DIR}/_herdr"
 }
 
-link_herdr_config
+link_managed "$HERDR_CONFIG_SOURCE" "$HERDR_CONFIG_TARGET"
 sync_starfactory_detection
 generate_completion

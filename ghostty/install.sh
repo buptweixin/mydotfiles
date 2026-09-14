@@ -7,6 +7,9 @@ SCRIPT_DIR="$(
 	pwd -P
 )"
 
+# shellcheck source=script/lib/link.sh
+source "$SCRIPT_DIR/../script/lib/link.sh"
+
 GHOSTTY_CONFIG_SOURCE="$SCRIPT_DIR/config.ghostty"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -39,28 +42,5 @@ ensure_ghostty_installed() {
 	fi
 }
 
-link_ghostty_config() {
-	local current_src backup_target
-
-	mkdir -p "$GHOSTTY_CONFIG_DIR"
-
-	if [[ -L "$GHOSTTY_CONFIG_TARGET" ]]; then
-		current_src="$(readlink "$GHOSTTY_CONFIG_TARGET")"
-		if [[ "$current_src" == "$GHOSTTY_CONFIG_SOURCE" ]]; then
-			echo "Ghostty config is already linked."
-			return
-		fi
-	fi
-
-	if [[ -e "$GHOSTTY_CONFIG_TARGET" || -L "$GHOSTTY_CONFIG_TARGET" ]]; then
-		backup_target="${GHOSTTY_CONFIG_TARGET}.bak.$(date +%Y%m%d%H%M%S)"
-		echo "Backup existing Ghostty config to ${backup_target}"
-		mv "$GHOSTTY_CONFIG_TARGET" "$backup_target"
-	fi
-
-	ln -s "$GHOSTTY_CONFIG_SOURCE" "$GHOSTTY_CONFIG_TARGET"
-	echo "Linked Ghostty config to ${GHOSTTY_CONFIG_TARGET}"
-}
-
 ensure_ghostty_installed
-link_ghostty_config
+link_managed "$GHOSTTY_CONFIG_SOURCE" "$GHOSTTY_CONFIG_TARGET"
