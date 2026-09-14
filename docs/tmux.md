@@ -84,7 +84,7 @@ SSH 进来、挂上 VPN、或 `direnv` 变更后，tmux 里旧环境不会自动
 
 右侧每 5s 刷新：在线状态 ●、CPU/MEM（sysstat）、电池。prefix 高亮块会显示
 当前是否在 copy-mode。插件由 TPM 管理（battery / prefix-highlight /
-online-status / sidebar / copycat / open / sysstat），装新插件后 `prefix+I`。
+online-status / open / sysstat），装新插件后 `prefix+I`。
 
 ## 设计要点（为什么这么配）
 

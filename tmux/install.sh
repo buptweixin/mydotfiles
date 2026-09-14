@@ -75,7 +75,10 @@ while IFS=' ' read -r plugin_name plugin_repo plugin_commit extra; do
 	install_locked_plugin "$plugin_name" "$plugin_repo" "$plugin_commit"
 done < "$LOCKFILE"
 
-if [[ -e "$HOME/.tmux.conf" || -L "$HOME/.tmux.conf" ]]; then
+# Back up a pre-existing .tmux.conf — but not the bootstrap-managed symlink
+# into this repo, or every rerun would mint a fresh backup file.
+if [[ ( -e "$HOME/.tmux.conf" || -L "$HOME/.tmux.conf" ) &&
+	"$(readlink "$HOME/.tmux.conf" 2>/dev/null || true)" != "$REPODIR/tmux.conf.symlink" ]]; then
 	backup="$HOME/.tmux.conf.bak.$(date +%Y%m%d%H%M%S)"
 	if [[ -e "$backup" || -L "$backup" ]]; then
 		backup="$backup.$$"
