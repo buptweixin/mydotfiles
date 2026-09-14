@@ -62,14 +62,11 @@ alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 
-function gfg() { git ls-files | grep $@ }
-
-alias gg='git gui citool'
-alias gga='git gui citool --amend'
+function gfg() { git ls-files | grep "$@" }
 
 ggf() {
   [[ "$#" != 1 ]] && local b="$(git_current_branch)"
-  git push --force origin "${b:=$1}"
+  git push --force-with-lease origin "${b:=$1}"
 }
 
 ggl() {
@@ -116,10 +113,6 @@ alias ghh='git help'
 
 alias gignore='git update-index --assume-unchanged'
 alias gignored='git ls-files -v | grep "^[[:lower:]]"'
-alias git-svn-dcommit-push='git svn dcommit && git push github master:svntrunk'
-
-alias gk='\gitk --all --branches'
-alias gke='\gitk --all $(git log -g --pretty=%h)'
 
 alias glg='git log --stat'
 alias glgp='git log --stat -p'
@@ -163,10 +156,8 @@ alias grup='git remote update'
 alias grv='git remote -v'
 
 alias gsb='git status -sb'
-alias gsd='git svn dcommit'
 alias gsi='git submodule init'
 alias gsps='git show --pretty=short --show-signature'
-alias gsr='git svn rebase'
 alias gss='git status -s'
 alias gst='git status'
 alias gsta='git stash save'
